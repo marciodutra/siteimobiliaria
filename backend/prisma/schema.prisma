@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int         @id @default(autoincrement())
+  nome      String
+  email     String      @unique
+  senha     String
+  tipo      TipoUsuario
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  corretor  Corretor?
+}
+
+model Corretor {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  telefone  String
+  creci     String   @unique
+  foto      String?
+  userId    Int      @unique
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  imoveis   Imovel[]
+}
+
+model Imovel {
+  id         Int          @id @default(autoincrement())
+  codigo     String       @unique
+  titulo     String
+  descricao  String
+  tipo       String
+  negocio    TipoNegocio
+  valor      Decimal      @db.Decimal(12, 2)
+  cidade     String
+  bairro     String
+  endereco   String
+  quartos    Int
+  banheiros  Int
+  suites     Int
+  vagas      Int
+  area       Float
+  destaque   Boolean      @default(false)
+  status     StatusImovel @default(DISPONIVEL)
+  corretorId Int
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+  imagens    Imagem[]
+  corretor   Corretor     @relation(fields: [corretorId], references: [id])
+  mensagens  Mensagem[]
+}
+
+model Imagem {
+  id        Int     @id @default(autoincrement())
+  caminho   String
+  principal Boolean @default(false)
+  imovelId  Int
+  imovel    Imovel  @relation(fields: [imovelId], references: [id], onDelete: Cascade)
+}
+
+model Mensagem {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  email     String
+  telefone  String?
+  mensagem  String
+  createdAt DateTime @default(now())
+  imovelId  Int
+  imovel    Imovel   @relation(fields: [imovelId], references: [id], onDelete: Cascade)
+}
+
+enum TipoUsuario {
+  ADMIN
+  CORRETOR
+  CLIENTE
+}
+
+enum TipoNegocio {
+  VENDA
+  ALUGUEL
+}
+
+enum StatusImovel {
+  DISPONIVEL
+  VENDIDO
+  ALUGADO
+  INATIVO
+}
