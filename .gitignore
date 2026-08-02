@@ -1,0 +1,22 @@
+# Dependências
+node_modules/
+
+# Variáveis de ambiente
+.env
+
+# Logs
+*.log
+
+# Build
+dist/
+build/
+
+# Uploads (não versionar imagens enviadas pelos usuários)
+backend/uploads/
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+
+# VS Code (opcional)
+.vscode/settings.json
