@@ -70,7 +70,8 @@ async function listar(req, res) {
                     select: {
                         id: true,
                         nome: true,
-                        telefone: true
+                        telefone: true,
+                        userId: true
                     }
                 }
 

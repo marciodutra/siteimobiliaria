@@ -85,9 +85,13 @@ function MeusImoveis() {
 
     useEffect(() => {
 
-        carregarImoveis();
+        if (user) {
 
-    }, []);
+            carregarImoveis();
+
+        }
+
+    }, [user]);
 
 
 
