@@ -8,6 +8,7 @@ const imovelRoutes = require("./routes/imovel.routes");
 const corretorRoutes = require("./routes/corretor.routes");
 const imagemRoutes = require("./routes/imagem.routes");
 const mensagemRoutes = require("./routes/mensagem.routes");
+const usuarioRoutes = require("./routes/usuario.routes");
 
 app.use(cors());
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use("/api/corretores", corretorRoutes);
 app.use("/api/imagens", imagemRoutes);
 app.use("/uploads", express.static("uploads"));
 app.use("/api/mensagens", mensagemRoutes);
+app.use("/api/usuarios", usuarioRoutes);
 
 app.get("/", (req, res) => {
     res.json({

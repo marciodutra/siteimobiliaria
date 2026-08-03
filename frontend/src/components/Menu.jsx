@@ -76,11 +76,12 @@ function Menu() {
 
                     {user?.tipo === "ADMIN" && (
 
-                        <button className="btn btn-warning me-2">
-
-                            Admin
-
-                        </button>
+                        <Link
+                            className="btn btn-warning me-2"
+                            to="/usuarios"
+                        >
+                            Usuários
+                        </Link>
 
                     )}
 

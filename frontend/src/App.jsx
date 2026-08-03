@@ -12,6 +12,7 @@ import LayoutSistema from "./components/LayoutSistema";
 import LayoutSite from "./components/LayoutSite";
 import DetalhesImovel from "./pages/DetalhesImovel";
 import BuscarImoveis from "./pages/BuscarImoveis";
+import Usuarios from "./pages/Usuarios";
 
 function App() {
 
@@ -95,6 +96,15 @@ function App() {
             <LayoutSite>
               <BuscarImoveis />
             </LayoutSite>
+          }
+        />
+
+        <Route
+          path="/usuarios"
+          element={
+            <LayoutSistema>
+              <Usuarios />
+            </LayoutSistema>
           }
         />
 
