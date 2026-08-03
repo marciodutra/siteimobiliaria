@@ -24,22 +24,74 @@ async function listar(req, res) {
 
     try {
 
+
+        const {
+            cidade,
+            tipo,
+            negocio
+        } = req.query;
+
+
+
         const imoveis = await prisma.imovel.findMany({
+
+            where: {
+
+
+                cidade: cidade
+                    ? {
+                        contains: cidade,
+                        mode: "insensitive"
+                    }
+                    : undefined,
+
+
+
+                tipo: tipo
+                    ? tipo
+                    : undefined,
+
+
+
+                negocio: negocio
+                    ? negocio
+                    : undefined
+
+
+            },
+
+
+
             include: {
+
                 imagens: true,
-                corretor: true
+
+                corretor: {
+                    select: {
+                        id: true,
+                        nome: true,
+                        telefone: true
+                    }
+                }
+
             }
+
+
         });
+
 
 
         res.json(imoveis);
 
 
+
     } catch (error) {
+
 
         res.status(500).json({
             error: error.message
         });
+
 
     }
 

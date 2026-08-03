@@ -1,100 +1,109 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Imoveis from "./pages/Imoveis";
 import MeusImoveis from "./pages/MeusImoveis";
 import CadastroImovel from "./pages/CadastroImovel";
-
-import Layout from "./components/Layout";
 import EditarImovel from "./pages/EditarImovel";
 
-
+import LayoutSistema from "./components/LayoutSistema";
+import LayoutSite from "./components/LayoutSite";
+import DetalhesImovel from "./pages/DetalhesImovel";
+import BuscarImoveis from "./pages/BuscarImoveis";
 
 function App() {
-
 
   return (
 
     <BrowserRouter>
 
-
       <Routes>
-
 
         <Route
           path="/"
-          element={<Login />}
+          element={
+            <LayoutSite>
+              <Home />
+            </LayoutSite>
+          }
         />
-
 
         <Route
           path="/login"
           element={<Login />}
         />
 
-
-
         <Route
           path="/dashboard"
           element={
-            <Layout>
+            <LayoutSistema>
               <Dashboard />
-            </Layout>
+            </LayoutSistema>
           }
         />
-
-
 
         <Route
           path="/imoveis"
           element={
-            <Layout>
+            <LayoutSistema>
               <Imoveis />
-            </Layout>
+            </LayoutSistema>
           }
         />
-
-
 
         <Route
           path="/meus-imoveis"
           element={
-            <Layout>
+            <LayoutSistema>
               <MeusImoveis />
-            </Layout>
+            </LayoutSistema>
           }
         />
-
-
 
         <Route
           path="/cadastro-imovel"
           element={
-            <Layout>
+            <LayoutSistema>
               <CadastroImovel />
-            </Layout>
+            </LayoutSistema>
           }
         />
 
         <Route
           path="/editar-imovel/:id"
           element={
-            <Layout>
+            <LayoutSistema>
               <EditarImovel />
-            </Layout>
+            </LayoutSistema>
           }
         />
 
+        <Route
+          path="/imovel/:id"
+          element={
+            <LayoutSite>
+              <DetalhesImovel />
+            </LayoutSite>
+          }
+        />
+
+        <Route
+          path="/buscar-imoveis"
+          element={
+            <LayoutSite>
+              <BuscarImoveis />
+            </LayoutSite>
+          }
+        />
 
       </Routes>
-
 
     </BrowserRouter>
 
   );
 
 }
-
 
 export default App;

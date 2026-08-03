@@ -1,7 +1,7 @@
 import Menu from "./Menu";
 
 
-function Layout({ children }) {
+function LayoutSistema({ children }) {
 
 
     return (
@@ -25,4 +25,4 @@ function Layout({ children }) {
 }
 
 
-export default Layout;
+export default LayoutSistema;

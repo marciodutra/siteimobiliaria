@@ -10,7 +10,7 @@ function CadastroImovel() {
         codigo: "",
         titulo: "",
         descricao: "",
-        tipo: "",
+        tipo: "Casa",
         negocio: "VENDA",
         valor: "",
         cidade: "",
@@ -24,7 +24,10 @@ function CadastroImovel() {
 
     });
 
+
     const [imagens, setImagens] = useState(null);
+
+
 
     function selecionarImagens(e) {
 
@@ -50,6 +53,8 @@ function CadastroImovel() {
 
 
 
+
+
     async function salvar(e) {
 
 
@@ -60,55 +65,84 @@ function CadastroImovel() {
 
 
             const response = await api.post(
+
                 "/imoveis",
+
                 {
                     ...form,
+
                     valor: Number(form.valor),
+
                     quartos: Number(form.quartos),
+
                     banheiros: Number(form.banheiros),
+
                     suites: Number(form.suites),
+
                     vagas: Number(form.vagas),
+
                     area: Number(form.area)
+
                 }
+
             );
+
 
 
             const imovelId = response.data.id;
 
 
 
+
             if (imagens) {
+
 
                 const formData = new FormData();
 
 
+
                 for (let i = 0; i < imagens.length; i++) {
 
+
                     formData.append(
+
                         "imagens",
+
                         imagens[i]
+
                     );
+
 
                 }
 
 
+
+
                 await api.post(
+
                     `/imagens/${imovelId}`,
+
                     formData,
+
                     {
+
                         headers: {
+
                             "Content-Type": "multipart/form-data"
+
                         }
+
                     }
+
                 );
+
 
             }
 
 
+
+
             alert("Imóvel cadastrado com sucesso");
-
-
-            console.log(response.data);
 
 
 
@@ -119,8 +153,11 @@ function CadastroImovel() {
 
 
             alert(
+
                 error.response?.data?.error ||
+
                 "Erro ao cadastrar imóvel"
+
             );
 
 
@@ -131,7 +168,10 @@ function CadastroImovel() {
 
 
 
+
+
     return (
+
 
         <div className="container mt-5">
 
@@ -142,68 +182,230 @@ function CadastroImovel() {
 
 
 
+
             <form onSubmit={salvar}>
 
 
-                {Object.keys(form).map((campo) => (
 
 
-                    <div
-                        className="mb-3"
-                        key={campo}
-                    >
+                {
 
-                        <label className="form-label">
-                            {campo}
-                        </label>
+                    Object.keys(form).map((campo) => {
 
 
-                        <input
 
-                            className="form-control"
-
-                            name={campo}
-
-                            type={
-                                [
-                                    "valor",
-                                    "quartos",
-                                    "banheiros",
-                                    "suites",
-                                    "vagas",
-                                    "area"
-                                ].includes(campo)
-                                    ? "number"
-                                    : "text"
-                            }
-
-                            value={form[campo]}
-
-                            onChange={handleChange}
-
-                        />
+                        if (campo === "tipo") {
 
 
-                    </div>
+                            return (
+
+                                <div
+                                    className="mb-3"
+                                    key={campo}
+                                >
+
+                                    <label className="form-label">
+                                        Tipo
+                                    </label>
 
 
-                ))}
+                                    <select
+
+                                        className="form-select"
+
+                                        name="tipo"
+
+                                        value={form.tipo}
+
+                                        onChange={handleChange}
+
+                                    >
+
+                                        <option value="Casa">
+                                            Casa
+                                        </option>
+
+
+                                        <option value="Apartamento">
+                                            Apartamento
+                                        </option>
+
+
+                                        <option value="Terreno">
+                                            Terreno
+                                        </option>
+
+
+                                        <option value="Comercial">
+                                            Comercial
+                                        </option>
+
+
+                                    </select>
+
+
+                                </div>
+
+                            );
+
+                        }
+
+
+
+
+
+                        if (campo === "negocio") {
+
+
+                            return (
+
+                                <div
+                                    className="mb-3"
+                                    key={campo}
+                                >
+
+                                    <label className="form-label">
+                                        Negócio
+                                    </label>
+
+
+                                    <select
+
+                                        className="form-select"
+
+                                        name="negocio"
+
+                                        value={form.negocio}
+
+                                        onChange={handleChange}
+
+                                    >
+
+                                        <option value="VENDA">
+                                            Venda
+                                        </option>
+
+
+                                        <option value="ALUGUEL">
+                                            Aluguel
+                                        </option>
+
+
+                                    </select>
+
+
+                                </div>
+
+                            );
+
+                        }
+
+
+
+
+
+
+                        return (
+
+                            <div
+
+                                className="mb-3"
+
+                                key={campo}
+
+                            >
+
+                                <label className="form-label">
+
+                                    {campo}
+
+                                </label>
+
+
+
+
+                                <input
+
+                                    className="form-control"
+
+                                    name={campo}
+
+                                    type={
+
+                                        [
+
+                                            "valor",
+
+                                            "quartos",
+
+                                            "banheiros",
+
+                                            "suites",
+
+                                            "vagas",
+
+                                            "area"
+
+                                        ].includes(campo)
+
+                                        ? "number"
+
+                                        : "text"
+
+                                    }
+
+
+                                    value={form[campo]}
+
+
+                                    onChange={handleChange}
+
+
+                                />
+
+
+                            </div>
+
+
+                        );
+
+
+                    })
+
+                }
+
+
+
 
                 <div className="mb-3">
 
+
                     <label className="form-label">
+
                         Fotos do imóvel
+
                     </label>
 
+
+
                     <input
+
                         className="form-control"
+
                         type="file"
+
                         multiple
+
                         accept="image/*"
+
                         onChange={selecionarImagens}
+
                     />
 
+
                 </div>
+
+
 
 
 
@@ -214,10 +416,14 @@ function CadastroImovel() {
                 </button>
 
 
+
+
             </form>
 
 
+
         </div>
+
 
     );
 
