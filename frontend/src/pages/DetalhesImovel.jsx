@@ -12,7 +12,69 @@ function DetalhesImovel() {
 
     const [imovel, setImovel] = useState(null);
     const [imagemAtual, setImagemAtual] = useState(null);
+    const [formulario, setFormulario] = useState({
 
+        nome: "",
+        email: "",
+        telefone: "",
+        mensagem: ""
+
+    });
+
+
+    const [enviando, setEnviando] = useState(false);
+
+    async function enviarMensagem(e) {
+
+        e.preventDefault();
+
+
+        try {
+
+            setEnviando(true);
+
+
+            await api.post("/mensagens", {
+
+                ...formulario,
+
+                imovelId: imovel.id
+
+            });
+
+
+            alert("Mensagem enviada com sucesso!");
+
+
+            setFormulario({
+
+                nome: "",
+                email: "",
+                telefone: "",
+                mensagem: ""
+
+            });
+
+
+        } catch (error) {
+
+
+            console.error(error);
+
+
+            alert(
+                error.response?.data?.error ||
+                "Erro ao enviar mensagem"
+            );
+
+
+        } finally {
+
+            setEnviando(false);
+
+        }
+
+    }
 
 
     useEffect(() => {
@@ -83,7 +145,17 @@ function DetalhesImovel() {
 
     }
 
+    function alterarCampo(e) {
 
+        setFormulario({
+
+            ...formulario,
+
+            [e.target.name]: e.target.value
+
+        });
+
+    }
 
 
     return (
@@ -317,8 +389,110 @@ function DetalhesImovel() {
 
             </div>
 
+            <div className="card mt-4 shadow-sm">
+
+                <div className="card-body">
+
+                    <h3>
+                        Tenho interesse neste imóvel
+                    </h3>
 
 
+                    <form onSubmit={enviarMensagem}>
+
+
+                        <input
+
+                            className="form-control mb-2"
+
+                            name="nome"
+
+                            placeholder="Seu nome"
+
+                            value={formulario.nome}
+
+                            onChange={alterarCampo}
+
+                            required
+
+                        />
+
+
+                        <input
+
+                            className="form-control mb-2"
+
+                            name="email"
+
+                            type="email"
+
+                            placeholder="Seu email"
+
+                            value={formulario.email}
+
+                            onChange={alterarCampo}
+
+                            required
+
+                        />
+
+
+                        <input
+
+                            className="form-control mb-2"
+
+                            name="telefone"
+
+                            placeholder="Seu telefone"
+
+                            value={formulario.telefone}
+
+                            onChange={alterarCampo}
+
+                        />
+
+
+                        <textarea
+
+                            className="form-control mb-3"
+
+                            name="mensagem"
+
+                            rows="4"
+
+                            placeholder="Digite sua mensagem"
+
+                            value={formulario.mensagem}
+
+                            onChange={alterarCampo}
+
+                            required
+
+                        />
+
+
+                        <button
+
+                            className="btn btn-success"
+
+                            disabled={enviando}
+
+                        >
+
+                            {enviando
+                                ? "Enviando..."
+                                : "Enviar mensagem"
+                            }
+
+                        </button>
+
+
+                    </form>
+
+
+                </div>
+
+            </div>
 
 
             <div className="card mt-4 shadow-sm">

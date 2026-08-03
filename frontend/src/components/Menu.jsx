@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 
 
@@ -6,6 +6,15 @@ function Menu() {
 
 
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    function sair() {
+
+        logout();
+
+        navigate("/");
+
+    }
 
 
 
@@ -79,11 +88,9 @@ function Menu() {
 
                     <button
                         className="btn btn-danger"
-                        onClick={logout}
+                        onClick={sair}
                     >
-
                         Sair
-
                     </button>
 
 
