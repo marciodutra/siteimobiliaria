@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { API_URL } from "../../config";
 
 function CardImovel({ id, titulo, cidade, valor, imagens }) {
 
@@ -16,11 +15,11 @@ function CardImovel({ id, titulo, cidade, valor, imagens }) {
 
         if (principal) {
 
-            imagem = `${API_URL}${principal.caminho}`;
+            imagem = `http://localhost:3000${principal.caminho}`;
 
         } else {
 
-            imagem = `${API_URL}${imagens[0].caminho}`;
+            imagem = `http://localhost:3000${imagens[0].caminho}`;
 
         }
 
