@@ -13,6 +13,8 @@ import LayoutSite from "./components/LayoutSite";
 import DetalhesImovel from "./pages/DetalhesImovel";
 import BuscarImoveis from "./pages/BuscarImoveis";
 import Usuarios from "./pages/Usuarios";
+import Comprar from "./pages/Comprar";
+import Alugar from "./pages/Alugar";
 
 function App() {
 
@@ -105,6 +107,24 @@ function App() {
             <LayoutSistema>
               <Usuarios />
             </LayoutSistema>
+          }
+        />
+
+        <Route
+          path="/comprar"
+          element={
+            <LayoutSite>
+              <Comprar />
+            </LayoutSite>
+          }
+        />
+
+        <Route
+          path="/alugar"
+          element={
+            <LayoutSite>
+              <Alugar />
+            </LayoutSite>
           }
         />
 
