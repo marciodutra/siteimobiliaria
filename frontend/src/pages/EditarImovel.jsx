@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/api";
+import { API_URL } from "../config";
 
 
 function EditarImovel() {
@@ -339,7 +340,7 @@ function EditarImovel() {
                                             <img
 
                                                 src={
-                                                    `http://localhost:3000${imagem.caminho}`
+                                                    `${API_URL}${imagem.caminho}`
                                                 }
 
                                                 alt="Imóvel"

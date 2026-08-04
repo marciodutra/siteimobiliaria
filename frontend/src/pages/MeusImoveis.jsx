@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import api from "../api/api";
 import { useAuth } from "../auth/AuthContext";
 import { Link } from "react-router-dom";
+import { API_URL } from "../config";
 
 
 function MeusImoveis() {
@@ -127,7 +128,7 @@ function MeusImoveis() {
                                     <img
 
                                         src={
-                                            `http://localhost:3000${imovel.imagens[0].caminho}`
+                                            `${API_URL}${imovel.imagens[0].caminho}`
                                         }
 
                                         className="card-img-top"

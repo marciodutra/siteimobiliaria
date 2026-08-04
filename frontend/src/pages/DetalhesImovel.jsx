@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { API_URL } from "../config";
 
 import api from "../api/api";
 
@@ -173,7 +174,7 @@ function DetalhesImovel() {
 
                         src={
                             imagemAtual
-                                ? `http://localhost:3000${imagemAtual.caminho}`
+                                ? `${API_URL}${imagemAtual.caminho}`
                                 : "https://placehold.co/800x500"
                         }
 
@@ -200,7 +201,7 @@ function DetalhesImovel() {
 
                                     key={img.id}
 
-                                    src={`http://localhost:3000${img.caminho}`}
+                                    src={`${API_URL}${img.caminho}`}
 
                                     onClick={() => setImagemAtual(img)}
 
