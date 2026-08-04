@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 
 function CardImovel({ id, titulo, cidade, valor, imagens }) {
 
-    const API_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 
     let imagem = "https://placehold.co/600x400";
+
 
     if (imagens && imagens.length > 0) {
 
@@ -12,21 +12,25 @@ function CardImovel({ id, titulo, cidade, valor, imagens }) {
             img => img.principal
         );
 
+
         if (principal) {
 
-            imagem = `${API_URL}${principal.caminho}`;
+            imagem = `http://localhost:3000${principal.caminho}`;
 
         } else {
 
-            imagem = `${API_URL}${imagens[0].caminho}`;
+            imagem = `http://localhost:3000${imagens[0].caminho}`;
 
         }
 
     }
 
+
+
     return (
 
         <div className="card shadow-sm h-100">
+
 
             <img
                 key={imagem}
@@ -39,33 +43,50 @@ function CardImovel({ id, titulo, cidade, valor, imagens }) {
                 }}
             />
 
+
             <div className="card-body">
+
 
                 <h5>
                     {titulo}
                 </h5>
 
+
                 <p className="text-muted">
+
                     {cidade}
+
                 </p>
 
+
                 <h4 className="text-primary">
+
                     R$ {valor}
+
                 </h4>
 
+
                 <Link
+
                     to={`/imovel/${id}`}
+
                     className="btn btn-outline-primary w-100"
+
                 >
+
                     Ver imóvel
+
                 </Link>
 
+
             </div>
+
 
         </div>
 
     );
 
 }
+
 
 export default CardImovel;
