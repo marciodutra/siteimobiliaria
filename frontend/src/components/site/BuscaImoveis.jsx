@@ -10,9 +10,9 @@ function BuscaImoveis() {
 
     const [cidade, setCidade] = useState("");
 
-    const [negocio, setNegocio] = useState("VENDA");
+    const [negocio, setNegocio] = useState("");
 
-    const [tipo, setTipo] = useState("Casa");    
+    const [tipo, setTipo] = useState("");
 
 
 
@@ -119,6 +119,11 @@ function BuscaImoveis() {
 
                             >
 
+                                <option value="">
+                                    Todos
+                                </option>
+
+
                                 <option value="VENDA">
                                     Comprar
                                 </option>
@@ -151,6 +156,11 @@ function BuscaImoveis() {
                                 }
 
                             >
+
+
+                                <option value="">
+                                    Todos
+                                </option>
 
 
                                 <option value="Casa">
