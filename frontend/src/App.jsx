@@ -15,6 +15,7 @@ import BuscarImoveis from "./pages/BuscarImoveis";
 import Usuarios from "./pages/Usuarios";
 import Comprar from "./pages/Comprar";
 import Alugar from "./pages/Alugar";
+import Mensagens from "./pages/Mensagens";
 
 function App() {
 
@@ -125,6 +126,15 @@ function App() {
             <LayoutSite>
               <Alugar />
             </LayoutSite>
+          }
+        />
+
+        <Route
+          path="/mensagens"
+          element={
+            <LayoutSistema>
+              <Mensagens />
+            </LayoutSistema>
           }
         />
 
