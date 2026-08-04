@@ -4,17 +4,19 @@ const path = require("path");
 
 
 
-async function adicionarImagem(req, res){
+async function adicionarImagem(req, res) {
+
+    console.log("IMOVEL:", req.params.imovelId);
+    console.log("FILES:", req.files);
 
     try {
 
         const { imovelId } = req.params;
 
-
-        if(!req.files || req.files.length === 0){
+        if (!req.files || req.files.length === 0) {
 
             return res.status(400).json({
-                erro:"Nenhuma imagem enviada"
+                erro: "Nenhuma imagem enviada"
             });
 
         }
