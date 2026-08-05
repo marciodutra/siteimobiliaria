@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../api/api";
 
+const API_URL = import.meta.env.VITE_API_URL.replace("/api", "");
+
 
 function EditarImovel() {
 
@@ -118,7 +120,7 @@ function EditarImovel() {
 
 
 
-        } catch(error) {
+        } catch (error) {
 
 
             alert(
@@ -247,7 +249,7 @@ function EditarImovel() {
 
 
 
-        } catch(error) {
+        } catch (error) {
 
 
             alert(
@@ -337,23 +339,13 @@ function EditarImovel() {
 
 
                                             <img
-
-                                                src={
-                                                    `http://localhost:3000${imagem.caminho}`
-                                                }
-
+                                                src={`${API_URL}${imagem.caminho}`}
                                                 alt="Imóvel"
-
                                                 style={{
-
-                                                    width:"130px",
-
-                                                    height:"100px",
-
-                                                    objectFit:"cover"
-
+                                                    width: "130px",
+                                                    height: "100px",
+                                                    objectFit: "cover"
                                                 }}
-
                                             />
 
 

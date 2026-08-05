@@ -3,6 +3,8 @@ import api from "../api/api";
 import { useAuth } from "../auth/AuthContext";
 import { Link } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL.replace("/api", "");
+
 
 function MeusImoveis() {
 
@@ -125,20 +127,13 @@ function MeusImoveis() {
                                 imovel.imagens.length > 0 && (
 
                                     <img
-
-                                        src={
-                                            `http://localhost:3000${imovel.imagens[0].caminho}`
-                                        }
-
+                                        src={`${API_URL}${imovel.imagens[0].caminho}`}
                                         className="card-img-top"
-
                                         style={{
                                             height: "220px",
                                             objectFit: "cover"
                                         }}
-
                                         alt={imovel.titulo}
-
                                     />
 
                                 )
