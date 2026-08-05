@@ -9,6 +9,8 @@ function ListaUsuarios() {
 
     const [editando, setEditando] = useState(null);
 
+    const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
+
 
 
     async function carregarUsuarios() {
@@ -21,7 +23,7 @@ function ListaUsuarios() {
             setUsuarios(resposta.data);
 
 
-        } catch(error) {
+        } catch (error) {
 
             console.log(error);
 
@@ -64,7 +66,7 @@ function ListaUsuarios() {
 
 
 
-        } catch(error) {
+        } catch (error) {
 
 
             alert(
@@ -115,7 +117,7 @@ function ListaUsuarios() {
 
 
 
-        } catch(error) {
+        } catch (error) {
 
 
             alert(
@@ -169,10 +171,10 @@ function ListaUsuarios() {
 
 
 
-            <div className="table-responsive">
+            <div className="d-none d-md-block">
 
 
-                <table className="table table-bordered mt-4">
+                <table className="table table-bordered table-sm mt-4">
 
 
                     <thead>
@@ -415,6 +417,85 @@ function ListaUsuarios() {
 
 
                 </table>
+
+
+            </div>
+
+            <div className="d-block d-md-none mt-4">
+
+
+                {
+                    usuarios.map(usuario => (
+
+
+                        <div
+                            className="card mb-3 shadow-sm"
+                            key={usuario.id}
+                        >
+
+                            <div className="card-body">
+
+
+                                <h5>
+                                    {usuario.nome}
+                                </h5>
+
+
+                                <p>
+                                    <strong>Email:</strong>
+                                    <br />
+                                    {usuario.email}
+                                </p>
+
+
+                                <p>
+                                    <strong>Tipo:</strong>
+                                    <br />
+                                    {usuario.tipo}
+                                </p>
+
+
+
+                                <div className="d-flex gap-2">
+
+
+                                    <button
+
+                                        className="btn btn-primary"
+
+                                        onClick={() => setEditando(usuario)}
+
+                                    >
+
+                                        Editar
+
+                                    </button>
+
+
+
+                                    <button
+
+                                        className="btn btn-danger"
+
+                                        onClick={() => excluir(usuario.id)}
+
+                                    >
+
+                                        Excluir
+
+                                    </button>
+
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                    ))
+                }
 
 
             </div>
