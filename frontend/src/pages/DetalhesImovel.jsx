@@ -12,6 +12,8 @@ function DetalhesImovel() {
 
     const [imovel, setImovel] = useState(null);
     const [imagemAtual, setImagemAtual] = useState(null);
+    const [modalAberto, setModalAberto] = useState(false);
+    const [indiceImagem, setIndiceImagem] = useState(0);
     const [formulario, setFormulario] = useState({
 
         nome: "",
@@ -120,8 +122,14 @@ function DetalhesImovel() {
                     );
 
 
-                    setImagemAtual(
-                        principal || resposta.data.imagens[0]
+                    const imgPrincipal = principal || resposta.data.imagens[0];
+
+                    setImagemAtual(imgPrincipal);
+
+                    setIndiceImagem(
+                        resposta.data.imagens.findIndex(
+                            img => img.id === imgPrincipal.id
+                        )
                     );
 
                 }
@@ -177,6 +185,42 @@ function DetalhesImovel() {
 
     }
 
+    function abrirImagem(img) {
+
+        setImagemAtual(img);
+
+        setIndiceImagem(
+            imovel.imagens.findIndex(i => i.id === img.id)
+        );
+
+        setModalAberto(true);
+
+    }
+
+    function proximaImagem() {
+
+        const novoIndice =
+            (indiceImagem + 1) % imovel.imagens.length;
+
+        setIndiceImagem(novoIndice);
+
+        setImagemAtual(imovel.imagens[novoIndice]);
+
+    }
+
+    function imagemAnterior() {
+
+        const novoIndice =
+            indiceImagem === 0
+                ? imovel.imagens.length - 1
+                : indiceImagem - 1;
+
+        setIndiceImagem(novoIndice);
+
+        setImagemAtual(imovel.imagens[novoIndice]);
+
+    }
+
     const enderecoMapa = encodeURIComponent(
         `${imovel.endereco}, ${imovel.bairro}, ${imovel.cidade}`
     );
@@ -201,12 +245,15 @@ function DetalhesImovel() {
                                 : "https://placehold.co/800x500"
                         }
 
+                        onClick={() => abrirImagem(imagemAtual)}
+
                         className="img-fluid rounded shadow"
 
                         style={{
                             width: "100%",
                             height: "450px",
-                            objectFit: "cover"
+                            objectFit: "cover",
+                            cursor: "pointer"
                         }}
 
                         alt={imovel.titulo}
@@ -226,7 +273,7 @@ function DetalhesImovel() {
 
                                     src={urlImagem(img.caminho)}
 
-                                    onClick={() => setImagemAtual(img)}
+                                    onClick={() => abrirImagem(img)}
 
                                     style={{
 
@@ -589,6 +636,56 @@ function DetalhesImovel() {
 
 
             </div>
+
+            {modalAberto && (
+
+                <div
+                    className="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"
+                    style={{
+                        backgroundColor: "rgba(0,0,0,0.9)",
+                        zIndex: 9999
+                    }}
+                >
+
+
+                    <button
+                        className="btn btn-light position-absolute top-0 end-0 m-3"
+                        onClick={() => setModalAberto(false)}
+                    >
+                        ✕
+                    </button>
+
+
+                    <button
+                        className="btn btn-light position-absolute start-0 ms-3"
+                        onClick={imagemAnterior}
+                    >
+                        ❮
+                    </button>
+
+
+                    <img
+                        src={urlImagem(imagemAtual.caminho)}
+                        alt="Imagem ampliada"
+                        style={{
+                            maxWidth: "90%",
+                            maxHeight: "90%",
+                            objectFit: "contain"
+                        }}
+                    />
+
+
+                    <button
+                        className="btn btn-light position-absolute end-0 me-3"
+                        onClick={proximaImagem}
+                    >
+                        ❯
+                    </button>
+
+
+                </div>
+
+            )}
 
 
 
