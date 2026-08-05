@@ -16,6 +16,7 @@ import Usuarios from "./pages/Usuarios";
 import Comprar from "./pages/Comprar";
 import Alugar from "./pages/Alugar";
 import Mensagens from "./pages/Mensagens";
+import ListaUsuarios from "./pages/ListaUsuarios";
 
 function App() {
 
@@ -134,6 +135,15 @@ function App() {
           element={
             <LayoutSistema>
               <Mensagens />
+            </LayoutSistema>
+          }
+        />
+
+        <Route
+          path="/lista-usuarios"
+          element={
+            <LayoutSistema>
+              <ListaUsuarios />
             </LayoutSistema>
           }
         />

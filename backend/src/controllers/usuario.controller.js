@@ -101,7 +101,156 @@ async function criarUsuario(req, res) {
 
 }
 
+async function listarUsuarios(req, res) {
+
+    try {
+
+        const usuarios = await prisma.user.findMany({
+
+            select: {
+
+                id: true,
+                nome: true,
+                email: true,
+                tipo: true,
+                createdAt: true,
+
+                corretor: {
+
+                    select: {
+
+                        telefone: true,
+                        creci: true
+
+                    }
+
+                }
+
+            }
+
+        });
+
+
+        res.json(usuarios);
+
+
+    } catch (error) {
+
+
+        res.status(500).json({
+
+            error: error.message
+
+        });
+
+
+    }
+
+}
+
+
+
+
+async function editarUsuario(req, res) {
+
+    try {
+
+        const { id } = req.params;
+
+        const {
+            nome,
+            email,
+            tipo
+        } = req.body;
+
+
+
+        const usuario = await prisma.user.update({
+
+            where: {
+                id: Number(id)
+            },
+
+            data: {
+
+                nome,
+                email,
+                tipo
+
+            }
+
+        });
+
+
+
+        res.json(usuario);
+
+
+
+    } catch (error) {
+
+
+        res.status(500).json({
+
+            error: error.message
+
+        });
+
+
+    }
+
+}
+
+
+
+
+
+
+async function excluirUsuario(req, res) {
+
+    try {
+
+
+        const { id } = req.params;
+
+
+
+        await prisma.user.delete({
+
+            where: {
+                id: Number(id)
+            }
+
+        });
+
+
+
+        res.json({
+
+            message: "Usuário excluído"
+
+        });
+
+
+
+    } catch (error) {
+
+
+        res.status(500).json({
+
+            error: error.message
+
+        });
+
+
+    }
+
+}
+
 
 module.exports = {
-    criarUsuario
+    criarUsuario,
+    listarUsuarios,
+    editarUsuario,
+    excluirUsuario
 };

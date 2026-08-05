@@ -185,19 +185,36 @@ function Menu() {
 
                     {user?.tipo === "ADMIN" && (
 
+                        <>
 
-                        <Link
+                            <Link
 
-                            className="btn btn-warning me-2"
+                                className="btn btn-warning me-2"
 
-                            to="/usuarios"
+                                to="/usuarios"
 
-                        >
+                            >
 
-                            Usuários
+                                Cadastrar usuário
 
-                        </Link>
+                            </Link>
 
+
+
+                            <Link
+
+                                className="btn btn-info me-2"
+
+                                to="/lista-usuarios"
+
+                            >
+
+                                Gerenciar usuários
+
+                            </Link>
+
+
+                        </>
 
                     )}
 

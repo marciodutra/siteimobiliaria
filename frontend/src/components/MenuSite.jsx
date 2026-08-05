@@ -63,17 +63,7 @@ function MenuSite() {
                             </Link>
 
                         </li>
-
-                        <li className="nav-item">
-
-                            <Link
-                                className="nav-link"
-                                to="/contato"
-                            >
-                                Contato
-                            </Link>
-
-                        </li>
+                        
 
                     </ul>
 
