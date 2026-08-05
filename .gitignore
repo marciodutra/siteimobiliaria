@@ -12,7 +12,7 @@ dist/
 build/
 
 # Uploads (não versionar imagens enviadas pelos usuários)
-backend/uploads/
+
 
 # Arquivos do sistema
 .DS_Store
