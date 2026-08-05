@@ -3,8 +3,6 @@ import { useParams } from "react-router-dom";
 
 import api from "../api/api";
 
-const API_URL = import.meta.env.VITE_API_URL.replace("/api", "");
-
 
 function DetalhesImovel() {
 
@@ -25,6 +23,26 @@ function DetalhesImovel() {
 
 
     const [enviando, setEnviando] = useState(false);
+
+    function urlImagem(caminho) {
+
+        if (!caminho) {
+
+            return "https://placehold.co/800x500";
+
+        }
+
+
+        if (caminho.startsWith("http")) {
+
+            return caminho;
+
+        }
+
+
+        return `${import.meta.env.VITE_API_URL.replace("/api", "")}${caminho}`;
+
+    }
 
     async function enviarMensagem(e) {
 
@@ -175,7 +193,7 @@ function DetalhesImovel() {
 
                         src={
                             imagemAtual
-                                ? `${API_URL}${imagemAtual.caminho}`
+                                ? urlImagem(imagemAtual.caminho)
                                 : "https://placehold.co/800x500"
                         }
 
@@ -202,7 +220,7 @@ function DetalhesImovel() {
 
                                     key={img.id}
 
-                                    src={`${API_URL}${img.caminho}`}
+                                    src={urlImagem(img.caminho)}
 
                                     onClick={() => setImagemAtual(img)}
 

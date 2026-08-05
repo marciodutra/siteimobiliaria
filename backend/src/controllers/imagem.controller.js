@@ -1,7 +1,5 @@
 const prisma = require("../lib/prisma");
-const fs = require("fs");
-const path = require("path");
-
+const supabase = require("../lib/supabase");
 
 
 async function adicionarImagem(req, res) {
@@ -22,22 +20,48 @@ async function adicionarImagem(req, res) {
         }
 
 
-
         const imagens = await Promise.all(
 
-            req.files.map((arquivo,index)=>{
+            req.files.map(async (arquivo, index) => {
+
+
+                const nomeArquivo =
+                    `imoveis/${Date.now()}-${arquivo.originalname}`;
+
+
+                const upload = await supabase.storage
+                    .from(process.env.SUPABASE_BUCKET)
+                    .upload(
+                        nomeArquivo,
+                        arquivo.buffer,
+                        {
+                            contentType: arquivo.mimetype
+                        }
+                    );
+
+
+                if (upload.error) {
+
+                    throw upload.error;
+
+                }
+
+
+                const { data } = supabase.storage
+                    .from(process.env.SUPABASE_BUCKET)
+                    .getPublicUrl(nomeArquivo);
+
 
 
                 return prisma.imagem.create({
 
-                    data:{
+                    data: {
 
-                        caminho:
-                        `/${arquivo.path.replace(/\\/g,"/")}`,
+                        caminho: data.publicUrl,
 
-                        principal:index === 0,
+                        principal: index === 0,
 
-                        imovelId:Number(imovelId)
+                        imovelId: Number(imovelId)
 
                     }
 
@@ -49,11 +73,10 @@ async function adicionarImagem(req, res) {
         );
 
 
-
         res.json(imagens);
 
 
-    } catch(error){
+    } catch(error) {
 
 
         console.log(error);
@@ -83,7 +106,6 @@ async function removerImagem(req,res){
         const { id } = req.params;
 
 
-
         const imagem = await prisma.imagem.findUnique({
 
             where:{
@@ -106,28 +128,6 @@ async function removerImagem(req,res){
 
 
 
-
-        const caminhoArquivo = path.join(
-
-            process.cwd(),
-
-            imagem.caminho.substring(1)
-
-        );
-
-
-
-
-        if(fs.existsSync(caminhoArquivo)){
-
-            fs.unlinkSync(caminhoArquivo);
-
-        }
-
-
-
-
-
         await prisma.imagem.delete({
 
             where:{
@@ -135,7 +135,6 @@ async function removerImagem(req,res){
             }
 
         });
-
 
 
 

@@ -3,7 +3,6 @@ import api from "../api/api";
 import { useAuth } from "../auth/AuthContext";
 import { Link } from "react-router-dom";
 
-const API_URL = import.meta.env.VITE_API_URL.replace("/api", "");
 
 
 function MeusImoveis() {
@@ -12,6 +11,26 @@ function MeusImoveis() {
     const [imoveis, setImoveis] = useState([]);
 
     const { user } = useAuth();
+
+    function urlImagem(caminho) {
+
+        if (!caminho) {
+
+            return "https://placehold.co/600x400";
+
+        }
+
+
+        if (caminho.startsWith("http")) {
+
+            return caminho;
+
+        }
+
+
+        return `${import.meta.env.VITE_API_URL.replace("/api", "")}${caminho}`;
+
+    }
 
 
 
@@ -127,7 +146,7 @@ function MeusImoveis() {
                                 imovel.imagens.length > 0 && (
 
                                     <img
-                                        src={`${API_URL}${imovel.imagens[0].caminho}`}
+                                        src={urlImagem(imovel.imagens[0].caminho)}
                                         className="card-img-top"
                                         style={{
                                             height: "220px",

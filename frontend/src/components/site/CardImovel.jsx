@@ -12,14 +12,20 @@ function CardImovel({ id, titulo, cidade, valor, imagens }) {
             img => img.principal
         );
 
+        console.log("IMAGEM PRINCIPAL:", principal);
+
 
         if (principal) {
 
-            imagem = `http://localhost:3000${principal.caminho}`;
+            imagem = principal.caminho.startsWith("http")
+                ? principal.caminho
+                : `http://localhost:3000${principal.caminho}`;
 
         } else {
 
-            imagem = `http://localhost:3000${imagens[0].caminho}`;
+            imagem = imagens[0].caminho.startsWith("http")
+                ? imagens[0].caminho
+                : `http://localhost:3000${imagens[0].caminho}`;
 
         }
 
@@ -33,14 +39,20 @@ function CardImovel({ id, titulo, cidade, valor, imagens }) {
 
 
             <img
+
                 key={imagem}
+
                 src={imagem}
+
                 className="card-img-top"
+
                 alt={titulo}
+
                 style={{
                     height: "250px",
                     objectFit: "cover"
                 }}
+
             />
 
 
