@@ -42,6 +42,8 @@ function MeusImoveis() {
 
             const response = await api.get("/imoveis");
 
+            console.log(response.data);
+
 
             const meus = response.data.filter(
                 imovel =>
