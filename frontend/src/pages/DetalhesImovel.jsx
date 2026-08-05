@@ -177,6 +177,10 @@ function DetalhesImovel() {
 
     }
 
+    const enderecoMapa = encodeURIComponent(
+        `${imovel.endereco}, ${imovel.bairro}, ${imovel.cidade}`
+    );
+
 
     return (
 
@@ -406,6 +410,44 @@ function DetalhesImovel() {
 
                 </div>
 
+
+            </div>
+
+            <div className="card mt-4 shadow-sm">
+
+                <div className="card-body">
+
+                    <h3>
+                        Localização
+                    </h3>
+
+                    <iframe
+                        title="Mapa do imóvel"
+                        width="100%"
+                        height="400"
+                        style={{
+                            border: 0,
+                            borderRadius: "8px"
+                        }}
+                        loading="lazy"
+                        allowFullScreen
+                        src={`https://www.google.com/maps?q=${enderecoMapa}&output=embed`}
+                    />
+
+                    <div className="mt-3">
+
+                        <a
+                            href={`https://www.google.com/maps/search/?api=1&query=${enderecoMapa}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="btn btn-outline-primary"
+                        >
+                            Abrir no Google Maps
+                        </a>
+
+                    </div>
+
+                </div>
 
             </div>
 
