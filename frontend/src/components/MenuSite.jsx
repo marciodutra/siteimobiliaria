@@ -1,18 +1,28 @@
 import { Link } from "react-router-dom";
+import logo from "../assets/logo.png";
 
 function MenuSite() {
 
     return (
 
-        <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <nav className="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top py-2">
 
             <div className="container">
 
                 <Link
-                    className="navbar-brand fw-bold"
+                    className="navbar-brand d-flex align-items-center"
                     to="/"
                 >
-                    Imobiliária
+
+                    <img
+                        src={logo}
+                        alt="Dutra Imóveis"
+                        style={{
+                            height: "55px",
+                            width: "auto"
+                        }}
+                    />
+
                 </Link>
 
                 <button
@@ -63,12 +73,12 @@ function MenuSite() {
                             </Link>
 
                         </li>
-                        
+
 
                     </ul>
 
                     <Link
-                        className="btn btn-primary ms-3"
+                        className="btn btn-primary rounded-pill px-4 ms-3"
                         to="/login"
                     >
                         Entrar
