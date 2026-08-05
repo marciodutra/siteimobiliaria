@@ -75,178 +75,130 @@ function Menu() {
 
     return (
 
-
         <nav className="navbar navbar-dark bg-dark">
-
 
             <div className="container">
 
-
-
                 <Link
-
                     className="navbar-brand"
-
                     to="/dashboard"
-
                 >
-
                     Imobiliária
-
                 </Link>
 
 
+                <button
+                    className="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#menuSistema"
+                >
+                    <span className="navbar-toggler-icon"></span>
+                </button>
 
 
-                <div>
 
+                <div
+                    className="collapse navbar-collapse"
+                    id="menuSistema"
+                >
 
+                    <div className="ms-auto d-flex flex-column flex-lg-row gap-2 mt-3 mt-lg-0">
 
-                    <Link
 
-                        className="btn btn-outline-light me-2"
+                        <Link
+                            className="btn btn-outline-light"
+                            to="/dashboard"
+                        >
+                            Dashboard
+                        </Link>
 
-                        to="/dashboard"
 
-                    >
 
-                        Dashboard
+                        {user?.tipo === "CORRETOR" && (
 
-                    </Link>
+                            <>
 
+                                <Link
+                                    className="btn btn-outline-light"
+                                    to="/meus-imoveis"
+                                >
+                                    Meus imóveis
+                                </Link>
 
 
 
+                                <Link
+                                    className="btn btn-outline-light"
+                                    to="/mensagens"
+                                >
+                                    Mensagens
+                                    {totalMensagens > 0 && (
+                                        ` (${totalMensagens})`
+                                    )}
+                                </Link>
 
-                    {user?.tipo === "CORRETOR" && (
 
-                        <>
 
+                                <Link
+                                    className="btn btn-success"
+                                    to="/cadastro-imovel"
+                                >
+                                    Novo imóvel
+                                </Link>
 
-                            <Link
+                            </>
 
-                                className="btn btn-outline-light me-2"
+                        )}
 
-                                to="/meus-imoveis"
 
-                            >
 
-                                Meus imóveis
 
-                            </Link>
+                        {user?.tipo === "ADMIN" && (
 
+                            <>
 
+                                <Link
+                                    className="btn btn-warning"
+                                    to="/usuarios"
+                                >
+                                    Cadastrar usuário
+                                </Link>
 
 
 
-                            <Link
+                                <Link
+                                    className="btn btn-info"
+                                    to="/lista-usuarios"
+                                >
+                                    Gerenciar usuários
+                                </Link>
 
-                                className="btn btn-outline-light me-2"
+                            </>
 
-                                to="/mensagens"
+                        )}
 
-                            >
 
-                                Mensagens
 
-                                {totalMensagens > 0 && (
 
-                                    ` (${totalMensagens})`
+                        <button
+                            className="btn btn-danger"
+                            onClick={sair}
+                        >
+                            Sair
+                        </button>
 
-                                )}
 
-                            </Link>
-
-
-
-
-
-                            <Link
-
-                                className="btn btn-success me-2"
-
-                                to="/cadastro-imovel"
-
-                            >
-
-                                Novo imóvel
-
-                            </Link>
-
-
-                        </>
-
-                    )}
-
-
-
-
-
-
-                    {user?.tipo === "ADMIN" && (
-
-                        <>
-
-                            <Link
-
-                                className="btn btn-warning me-2"
-
-                                to="/usuarios"
-
-                            >
-
-                                Cadastrar usuário
-
-                            </Link>
-
-
-
-                            <Link
-
-                                className="btn btn-info me-2"
-
-                                to="/lista-usuarios"
-
-                            >
-
-                                Gerenciar usuários
-
-                            </Link>
-
-
-                        </>
-
-                    )}
-
-
-
-
-
-
-                    <button
-
-                        className="btn btn-danger"
-
-                        onClick={sair}
-
-                    >
-
-                        Sair
-
-                    </button>
-
+                    </div>
 
 
                 </div>
 
 
-
             </div>
 
 
-
         </nav>
-
 
     );
 
