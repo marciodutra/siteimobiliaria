@@ -454,6 +454,95 @@ function ListaUsuarios() {
                                     {usuario.tipo}
                                 </p>
 
+                                {
+                                    usuarioSelecionado?.id === usuario.id && (
+
+                                        <div className="mt-3 border rounded p-3">
+
+                                            <input
+
+                                                className="form-control mb-2"
+
+                                                name="nome"
+
+                                                value={usuarioSelecionado.nome}
+
+                                                onChange={(e) =>
+                                                    setUsuarioSelecionado({
+                                                        ...usuarioSelecionado,
+                                                        nome: e.target.value
+                                                    })
+                                                }
+
+                                            />
+
+
+                                            <input
+
+                                                className="form-control mb-2"
+
+                                                name="email"
+
+                                                value={usuarioSelecionado.email}
+
+                                                onChange={(e) =>
+                                                    setUsuarioSelecionado({
+                                                        ...usuarioSelecionado,
+                                                        email: e.target.value
+                                                    })
+                                                }
+
+                                            />
+
+
+                                            <select
+
+                                                className="form-control mb-2"
+
+                                                value={usuarioSelecionado.tipo}
+
+                                                onChange={(e) =>
+                                                    setUsuarioSelecionado({
+                                                        ...usuarioSelecionado,
+                                                        tipo: e.target.value
+                                                    })
+                                                }
+
+                                            >
+
+                                                <option value="ADMIN">
+                                                    ADMIN
+                                                </option>
+
+                                                <option value="CORRETOR">
+                                                    CORRETOR
+                                                </option>
+
+                                                <option value="CLIENTE">
+                                                    CLIENTE
+                                                </option>
+
+                                            </select>
+
+
+                                            <button
+
+                                                className="btn btn-success"
+
+                                                onClick={() => salvarEdicao(usuarioSelecionado)}
+
+                                            >
+
+                                                Salvar
+
+                                            </button>
+
+
+                                        </div>
+
+                                    )
+                                }
+
 
 
                                 <div className="d-flex gap-2">
@@ -463,7 +552,7 @@ function ListaUsuarios() {
 
                                         className="btn btn-primary"
 
-                                        onClick={() => setEditando(usuario)}
+                                        onClick={() => setUsuarioSelecionado(usuario)}
 
                                     >
 

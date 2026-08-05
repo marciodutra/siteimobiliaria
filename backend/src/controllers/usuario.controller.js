@@ -215,10 +215,58 @@ async function excluirUsuario(req, res) {
 
 
 
-        await prisma.user.delete({
+        const usuario = await prisma.user.findUnique({
 
             where: {
                 id: Number(id)
+            },
+
+            include: {
+
+                corretor: true
+
+            }
+
+        });
+
+
+
+        if (!usuario) {
+
+            return res.status(404).json({
+
+                error: "Usuário não encontrado"
+
+            });
+
+        }
+
+
+
+        if (usuario.corretor) {
+
+
+            await prisma.corretor.delete({
+
+                where: {
+
+                    userId: Number(id)
+
+                }
+
+            });
+
+
+        }
+
+
+
+        await prisma.user.delete({
+
+            where: {
+
+                id: Number(id)
+
             }
 
         });
