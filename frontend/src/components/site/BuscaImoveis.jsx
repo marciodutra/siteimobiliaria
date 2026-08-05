@@ -14,6 +14,18 @@ function BuscaImoveis() {
 
     const [tipo, setTipo] = useState("");
 
+    const [bairro, setBairro] = useState("");
+
+    const [quartos, setQuartos] = useState("");
+
+    const [banheiros, setBanheiros] = useState("");
+
+    const [vagas, setVagas] = useState("");
+
+    const [valorMin, setValorMin] = useState("");
+
+    const [valorMax, setValorMax] = useState("");
+
 
 
 
@@ -55,6 +67,60 @@ function BuscaImoveis() {
 
         }
 
+        if (bairro) {
+
+            parametros.append(
+                "bairro",
+                bairro
+            );
+
+        }
+
+        if (quartos) {
+
+            parametros.append(
+                "quartos",
+                quartos
+            );
+
+        }
+
+        if (banheiros) {
+
+            parametros.append(
+                "banheiros",
+                banheiros
+            );
+
+        }
+
+        if (vagas) {
+
+            parametros.append(
+                "vagas",
+                vagas
+            );
+
+        }
+
+        if (valorMin) {
+
+            parametros.append(
+                "valorMin",
+                valorMin
+            );
+
+        }
+
+        if (valorMax) {
+
+            parametros.append(
+                "valorMax",
+                valorMax
+            );
+
+        }
+
 
 
         navigate(
@@ -79,133 +145,113 @@ function BuscaImoveis() {
                 <div className="card-body">
 
 
-                    <div className="row g-3">
+                    <div className="card-body">
 
+                        <div className="row g-3">
 
+                            <div className="col-md-3">
+                                <input
+                                    className="form-control"
+                                    placeholder="Cidade"
+                                    value={cidade}
+                                    onChange={e => setCidade(e.target.value)}
+                                />
+                            </div>
 
-                        <div className="col-md-3">
+                            <div className="col-md-3">
+                                <input
+                                    className="form-control"
+                                    placeholder="Bairro"
+                                    value={bairro}
+                                    onChange={e => setBairro(e.target.value)}
+                                />
+                            </div>
 
-                            <input
+                            <div className="col-md-3">
+                                <select
+                                    className="form-select"
+                                    value={negocio}
+                                    onChange={e => setNegocio(e.target.value)}
+                                >
+                                    <option value="">Comprar ou Alugar</option>
+                                    <option value="VENDA">Comprar</option>
+                                    <option value="ALUGUEL">Alugar</option>
+                                </select>
+                            </div>
 
-                                className="form-control"
+                            <div className="col-md-3">
+                                <select
+                                    className="form-select"
+                                    value={tipo}
+                                    onChange={e => setTipo(e.target.value)}
+                                >
+                                    <option value="">Tipo do imóvel</option>
+                                    <option value="Casa">Casa</option>
+                                    <option value="Apartamento">Apartamento</option>
+                                    <option value="Terreno">Terreno</option>
+                                </select>
+                            </div>
 
-                                placeholder="Cidade"
+                            <div className="col-md-2">
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Quartos"
+                                    value={quartos}
+                                    onChange={e => setQuartos(e.target.value)}
+                                />
+                            </div>
 
-                                value={cidade}
+                            <div className="col-md-2">
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Banheiros"
+                                    value={banheiros}
+                                    onChange={e => setBanheiros(e.target.value)}
+                                />
+                            </div>
 
-                                onChange={
-                                    e => setCidade(e.target.value)
-                                }
+                            <div className="col-md-2">
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Garagens"
+                                    value={vagas}
+                                    onChange={e => setVagas(e.target.value)}
+                                />
+                            </div>
 
-                            />
+                            <div className="col-md-2">
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Valor mín."
+                                    value={valorMin}
+                                    onChange={e => setValorMin(e.target.value)}
+                                />
+                            </div>
 
-                        </div>
+                            <div className="col-md-2">
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    placeholder="Valor máx."
+                                    value={valorMax}
+                                    onChange={e => setValorMax(e.target.value)}
+                                />
+                            </div>
 
-
-
-
-                        <div className="col-md-3">
-
-
-                            <select
-
-                                className="form-select"
-
-                                value={negocio}
-
-                                onChange={
-                                    e => setNegocio(e.target.value)
-                                }
-
-                            >
-
-                                <option value="">
-                                    Todos
-                                </option>
-
-
-                                <option value="VENDA">
-                                    Comprar
-                                </option>
-
-
-                                <option value="ALUGUEL">
-                                    Alugar
-                                </option>
-
-
-                            </select>
-
-
-                        </div>
-
-
-
-
-                        <div className="col-md-3">
-
-
-                            <select
-
-                                className="form-select"
-
-                                value={tipo}
-
-                                onChange={
-                                    e => setTipo(e.target.value)
-                                }
-
-                            >
-
-
-                                <option value="">
-                                    Todos
-                                </option>
-
-
-                                <option value="Casa">
-                                    Casa
-                                </option>
-
-
-                                <option value="Apartamento">
-                                    Apartamento
-                                </option>
-
-
-                                <option value="Terreno">
-                                    Terreno
-                                </option>
-
-
-                            </select>
-
-
-                        </div>
-
-
-
-
-                        <div className="col-md-3">
-
-
-                            <button
-
-                                className="btn btn-primary w-100"
-
-                                onClick={buscar}
-
-                            >
-
-                                Buscar
-
-                            </button>
-
+                            <div className="col-md-2 d-grid">
+                                <button
+                                    className="btn btn-primary"
+                                    onClick={buscar}
+                                >
+                                    Buscar
+                                </button>
+                            </div>
 
                         </div>
-
-
-
 
                     </div>
 

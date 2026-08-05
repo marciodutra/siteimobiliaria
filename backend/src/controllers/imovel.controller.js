@@ -24,75 +24,108 @@ async function listar(req, res) {
 
     try {
 
-
         const {
             cidade,
+            bairro,
             tipo,
-            negocio
+            negocio,
+            quartos,
+            banheiros,
+            vagas,
+            valorMin,
+            valorMax
         } = req.query;
 
+
+        const where = {
+
+            cidade: cidade
+                ? {
+                    contains: cidade,
+                    mode: "insensitive"
+                }
+                : undefined,
+
+            bairro: bairro
+                ? {
+                    contains: bairro,
+                    mode: "insensitive"
+                }
+                : undefined,
+
+            tipo: tipo || undefined,
+
+            negocio: negocio || undefined,
+
+            quartos: quartos
+                ? {
+                    gte: Number(quartos)
+                }
+                : undefined,
+
+            banheiros: banheiros
+                ? {
+                    gte: Number(banheiros)
+                }
+                : undefined,
+
+            vagas: vagas
+                ? {
+                    gte: Number(vagas)
+                }
+                : undefined,
+
+            valor: {
+
+                ...(valorMin && {
+                    gte: Number(valorMin)
+                }),
+
+                ...(valorMax && {
+                    lte: Number(valorMax)
+                })
+
+            }
+
+        };
+
+
+        if (!valorMin && !valorMax) {
+            delete where.valor;
+        }
 
 
         const imoveis = await prisma.imovel.findMany({
 
-            where: {
-
-
-                cidade: cidade
-                    ? {
-                        contains: cidade,
-                        mode: "insensitive"
-                    }
-                    : undefined,
-
-
-
-                tipo: tipo
-                    ? tipo
-                    : undefined,
-
-
-
-                negocio: negocio
-                    ? negocio
-                    : undefined
-
-
-            },
-
-
+            where,
 
             include: {
 
                 imagens: true,
 
                 corretor: {
+
                     select: {
                         id: true,
                         nome: true,
                         telefone: true,
                         userId: true
                     }
+
                 }
 
             }
 
-
         });
-
 
 
         res.json(imoveis);
 
-
-
     } catch (error) {
-
 
         res.status(500).json({
             error: error.message
         });
-
 
     }
 
