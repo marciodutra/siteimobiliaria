@@ -17,21 +17,38 @@ function Usuarios() {
     });
 
 
+    const [foto, setFoto] = useState(null);
+
+
 
     function alterar(e) {
+
 
         setForm({
 
             ...form,
+
             [e.target.name]: e.target.value
 
         });
+
 
     }
 
 
 
+    function selecionarFoto(e) {
+
+        setFoto(e.target.files[0]);
+
+    }
+
+
+
+
+
     async function cadastrar(e) {
+
 
         e.preventDefault();
 
@@ -39,22 +56,82 @@ function Usuarios() {
         try {
 
 
-            await api.post("/usuarios", form);
+
+            const formData = new FormData();
+
+
+
+            formData.append("nome", form.nome);
+
+            formData.append("email", form.email);
+
+            formData.append("senha", form.senha);
+
+            formData.append("tipo", form.tipo);
+
+            formData.append("telefone", form.telefone);
+
+            formData.append("creci", form.creci);
+
+
+
+            if (foto) {
+
+                formData.append("foto", foto);
+
+            }
+
+
+
+
+            await api.post(
+
+                "/usuarios",
+
+                formData,
+
+                {
+
+                    headers: {
+
+                        "Content-Type": "multipart/form-data"
+
+                    }
+
+                }
+
+            );
+
+
+
 
 
             alert("Usuário cadastrado com sucesso");
 
 
+
+
             setForm({
 
                 nome: "",
+
                 email: "",
+
                 senha: "",
+
                 tipo: "CORRETOR",
+
                 telefone: "",
+
                 creci: ""
 
             });
+
+
+
+            setFoto(null);
+
+
 
 
         } catch(error) {
@@ -63,9 +140,13 @@ function Usuarios() {
             console.log(error);
 
 
+
             alert(
+
                 error.response?.data?.error ||
+
                 "Erro ao cadastrar usuário"
+
             );
 
 
@@ -73,6 +154,9 @@ function Usuarios() {
 
 
     }
+
+
+
 
 
 
@@ -88,84 +172,129 @@ function Usuarios() {
 
 
 
+
             <form onSubmit={cadastrar}>
 
 
+
+
                 <div className="mb-3">
+
 
                     <label>
                         Nome
                     </label>
 
+
                     <input
+
                         className="form-control"
+
                         name="nome"
+
                         value={form.nome}
+
                         onChange={alterar}
+
                     />
+
 
                 </div>
 
 
 
+
+
                 <div className="mb-3">
+
 
                     <label>
                         Email
                     </label>
 
+
                     <input
+
                         className="form-control"
+
                         name="email"
+
                         type="email"
+
                         value={form.email}
+
                         onChange={alterar}
+
                     />
+
 
                 </div>
 
 
 
+
+
                 <div className="mb-3">
+
 
                     <label>
                         Senha
                     </label>
 
+
                     <input
+
                         className="form-control"
+
                         name="senha"
+
                         type="password"
+
                         value={form.senha}
+
                         onChange={alterar}
+
                     />
+
 
                 </div>
 
 
 
+
+
                 <div className="mb-3">
+
 
                     <label>
                         Tipo de usuário
                     </label>
 
 
+
                     <select
+
                         className="form-control"
+
                         name="tipo"
+
                         value={form.tipo}
+
                         onChange={alterar}
+
                     >
+
 
                         <option value="CORRETOR">
                             Corretor
                         </option>
 
 
+
                         <option value="ADMIN">
                             Administrador
                         </option>
+
 
 
                     </select>
@@ -175,12 +304,17 @@ function Usuarios() {
 
 
 
+
+
                 {form.tipo === "CORRETOR" && (
+
 
                     <>
 
 
+
                         <div className="mb-3">
+
 
                             <label>
                                 Telefone
@@ -190,17 +324,24 @@ function Usuarios() {
                             <input
 
                                 className="form-control"
+
                                 name="telefone"
+
                                 value={form.telefone}
+
                                 onChange={alterar}
 
                             />
+
 
                         </div>
 
 
 
+
+
                         <div className="mb-3">
+
 
                             <label>
                                 CRECI
@@ -210,29 +351,71 @@ function Usuarios() {
                             <input
 
                                 className="form-control"
+
                                 name="creci"
+
                                 value={form.creci}
+
                                 onChange={alterar}
 
                             />
 
+
                         </div>
 
 
+
+
+
+                        <div className="mb-3">
+
+
+                            <label>
+                                Foto do corretor
+                            </label>
+
+
+                            <input
+
+                                className="form-control"
+
+                                type="file"
+
+                                accept="image/*"
+
+                                onChange={selecionarFoto}
+
+                            />
+
+
+                        </div>
+
+
+
                     </>
+
 
                 )}
 
 
 
+
+
+
                 <button className="btn btn-success">
 
+
                     Cadastrar
+
 
                 </button>
 
 
+
+
             </form>
+
+
 
 
         </div>

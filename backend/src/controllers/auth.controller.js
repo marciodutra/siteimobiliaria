@@ -18,9 +18,11 @@ async function register(req, res) {
 
 
         if (existe) {
+
             return res.status(400).json({
                 error: "Email já cadastrado"
             });
+
         }
 
 
@@ -28,110 +30,203 @@ async function register(req, res) {
 
 
         const user = await prisma.user.create({
+
             data: {
+
                 nome,
+
                 email,
+
                 senha: senhaHash,
+
                 tipo: "CLIENTE"
+
             }
+
         });
 
 
         res.status(201).json({
+
             message: "Usuário criado com sucesso",
+
             user: {
+
                 id: user.id,
+
                 nome: user.nome,
+
                 email: user.email
+
             }
+
         });
 
 
     } catch (error) {
 
+
         res.status(500).json({
+
             error: error.message
+
         });
+
 
     }
 
 }
+
+
 
 
 
 async function login(req, res) {
 
+
     try {
+
 
         const { email, senha } = req.body;
 
 
+
         const user = await prisma.user.findUnique({
+
             where: {
+
                 email
+
+            },
+
+            include: {
+
+                corretor: true
+
             }
+
         });
 
 
+
+
         if (!user) {
+
+
             return res.status(404).json({
+
                 error: "Usuário não encontrado"
+
             });
+
+
         }
+
+
 
 
         const senhaValida = await bcrypt.compare(
+
             senha,
+
             user.senha
+
         );
+
+
 
 
         if (!senhaValida) {
+
+
             return res.status(401).json({
+
                 error: "Senha inválida"
+
             });
+
+
         }
 
 
+
+
         const token = jwt.sign(
+
             {
+
                 id: user.id,
+
                 email: user.email,
+
                 tipo: user.tipo
+
             },
+
             process.env.JWT_SECRET,
+
             {
+
                 expiresIn: "7d"
+
             }
+
         );
+
+
 
 
         console.log("TOKEN LOGIN:", token);
 
 
+
+
         res.json({
+
             token,
+
+
             user: {
+
                 id: user.id,
+
                 nome: user.nome,
+
                 email: user.email,
-                tipo: user.tipo
+
+                tipo: user.tipo,
+
+                corretor: user.corretor
+
             }
+
         });
+
+
 
 
     } catch (error) {
 
+
         res.status(500).json({
+
             error: error.message
+
         });
+
 
     }
 
 }
 
 
+
+
+
 module.exports = {
+
     register,
+
     login
+
 };
