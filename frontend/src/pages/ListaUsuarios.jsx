@@ -43,6 +43,7 @@ function ListaUsuarios() {
 
 
 
+
     async function excluir(id) {
 
 
@@ -76,6 +77,8 @@ function ListaUsuarios() {
 
 
     }
+
+
 
 
 
@@ -131,6 +134,8 @@ function ListaUsuarios() {
 
 
 
+
+
     function alterarEdicao(e) {
 
 
@@ -151,6 +156,7 @@ function ListaUsuarios() {
 
 
 
+
     return (
 
 
@@ -163,241 +169,255 @@ function ListaUsuarios() {
 
 
 
-            <table className="table table-bordered mt-4">
+            <div className="table-responsive">
 
 
-                <thead>
+                <table className="table table-bordered mt-4">
 
-                    <tr>
 
-                        <th>
-                            Nome
-                        </th>
+                    <thead>
 
-                        <th>
-                            Email
-                        </th>
+                        <tr>
 
-                        <th>
-                            Tipo
-                        </th>
+                            <th>
+                                Nome
+                            </th>
 
-                        <th>
-                            Ações
-                        </th>
+                            <th>
+                                Email
+                            </th>
 
+                            <th>
+                                Tipo
+                            </th>
 
-                    </tr>
+                            <th>
+                                Ações
+                            </th>
 
-                </thead>
 
+                        </tr>
 
+                    </thead>
 
-                <tbody>
 
 
-                    {
-                        usuarios.map(usuario => (
+                    <tbody>
 
 
-                            <tr key={usuario.id}>
+                        {
+                            usuarios.map(usuario => (
 
 
-                                <td>
+                                <tr key={usuario.id}>
 
 
-                                    {
-                                        editando?.id === usuario.id ? (
+                                    <td>
 
 
-                                            <input
+                                        {
+                                            editando?.id === usuario.id ? (
 
-                                                className="form-control"
 
-                                                name="nome"
+                                                <input
 
-                                                value={editando.nome}
+                                                    className="form-control"
 
-                                                onChange={alterarEdicao}
+                                                    name="nome"
 
-                                            />
+                                                    value={editando.nome}
 
+                                                    onChange={alterarEdicao}
 
-                                        ) : (
+                                                />
 
-                                            usuario.nome
 
-                                        )
+                                            ) : (
 
-                                    }
+                                                usuario.nome
 
+                                            )
 
-                                </td>
+                                        }
 
 
+                                    </td>
 
 
-                                <td>
 
 
-                                    {
-                                        editando?.id === usuario.id ? (
 
+                                    <td>
 
-                                            <input
 
-                                                className="form-control"
+                                        {
+                                            editando?.id === usuario.id ? (
 
-                                                name="email"
 
-                                                value={editando.email}
+                                                <input
 
-                                                onChange={alterarEdicao}
+                                                    className="form-control"
 
-                                            />
+                                                    name="email"
 
+                                                    value={editando.email}
 
-                                        ) : (
+                                                    onChange={alterarEdicao}
 
-                                            usuario.email
+                                                />
 
-                                        )
 
-                                    }
+                                            ) : (
 
+                                                usuario.email
 
-                                </td>
+                                            )
 
+                                        }
 
 
+                                    </td>
 
 
-                                <td>
 
 
-                                    {
-                                        editando?.id === usuario.id ? (
 
 
-                                            <select
+                                    <td>
 
-                                                className="form-control"
 
-                                                name="tipo"
+                                        {
+                                            editando?.id === usuario.id ? (
 
-                                                value={editando.tipo}
 
-                                                onChange={alterarEdicao}
+                                                <select
 
-                                            >
+                                                    className="form-control"
 
+                                                    name="tipo"
 
-                                                <option value="ADMIN">
-                                                    ADMIN
-                                                </option>
+                                                    value={editando.tipo}
 
+                                                    onChange={alterarEdicao}
 
-                                                <option value="CORRETOR">
-                                                    CORRETOR
-                                                </option>
+                                                >
 
 
-                                                <option value="CLIENTE">
-                                                    CLIENTE
-                                                </option>
+                                                    <option value="ADMIN">
+                                                        ADMIN
+                                                    </option>
 
 
-                                            </select>
+                                                    <option value="CORRETOR">
+                                                        CORRETOR
+                                                    </option>
 
 
-                                        ) : (
+                                                    <option value="CLIENTE">
+                                                        CLIENTE
+                                                    </option>
 
-                                            usuario.tipo
 
-                                        )
+                                                </select>
 
-                                    }
 
+                                            ) : (
 
-                                </td>
+                                                usuario.tipo
 
+                                            )
 
+                                        }
 
 
+                                    </td>
 
-                                <td>
 
 
-                                    {
-                                        editando?.id === usuario.id ? (
+
+
+
+                                    <td>
+
+
+                                        <div className="d-flex flex-column flex-md-row gap-2">
+
+
+                                            {
+                                                editando?.id === usuario.id ? (
+
+
+                                                    <button
+
+                                                        className="btn btn-success"
+
+                                                        onClick={() => salvarEdicao(editando)}
+
+                                                    >
+
+                                                        Salvar
+
+                                                    </button>
+
+
+                                                ) : (
+
+
+                                                    <button
+
+                                                        className="btn btn-primary"
+
+                                                        onClick={() => setEditando(usuario)}
+
+                                                    >
+
+                                                        Editar
+
+                                                    </button>
+
+
+                                                )
+
+                                            }
+
+
 
 
                                             <button
 
-                                                className="btn btn-success me-2"
+                                                className="btn btn-danger"
 
-                                                onClick={() => salvarEdicao(editando)}
+                                                onClick={() => excluir(usuario.id)}
 
                                             >
 
-                                                Salvar
+                                                Excluir
 
                                             </button>
 
 
-                                        ) : (
+                                        </div>
 
 
-                                            <button
-
-                                                className="btn btn-primary me-2"
-
-                                                onClick={() => setEditando(usuario)}
-
-                                            >
-
-                                                Editar
-
-                                            </button>
+                                    </td>
 
 
-                                        )
+                                </tr>
 
-                                    }
+
+                            ))
+
+                        }
+
+
+                    </tbody>
 
 
 
-
-                                    <button
-
-                                        className="btn btn-danger"
-
-                                        onClick={() => excluir(usuario.id)}
-
-                                    >
-
-                                        Excluir
-
-                                    </button>
+                </table>
 
 
-
-                                </td>
-
-
-                            </tr>
-
-
-                        ))
-
-                    }
-
-
-                </tbody>
-
-
-
-            </table>
+            </div>
 
 
 
