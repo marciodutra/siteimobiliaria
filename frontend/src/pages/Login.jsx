@@ -1,7 +1,10 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+
 import api from "../api/api";
 import { useAuth } from "../auth/AuthContext";
+
+import logo from "../assets/logo.png";
 
 
 function Login() {
@@ -41,9 +44,7 @@ function Login() {
             login(token, user);
 
 
-
             navigate("/dashboard");
-
 
 
         } catch (error) {
@@ -63,97 +64,177 @@ function Login() {
 
     return (
 
-        <div className="container mt-5">
 
-            <div className="row justify-content-center">
-
-                <div className="col-md-4">
-
-
-                    <h2 className="mb-4">
-                        Login
-                    </h2>
+        <div 
+            className="container d-flex justify-content-center align-items-center"
+            style={{
+                minHeight: "80vh"
+            }}
+        >
 
 
-
-                    {erro && (
-
-                        <div className="alert alert-danger">
-
-                            {erro}
-
-                        </div>
-
-                    )}
+            <div 
+                className="card shadow-sm p-4"
+                style={{
+                    width: "400px",
+                    borderRadius: "15px"
+                }}
+            >
 
 
-
-                    <form onSubmit={handleSubmit}>
-
-
-                        <div className="mb-3">
-
-                            <label>
-                                Email
-                            </label>
-
-                            <input
-
-                                type="email"
-
-                                className="form-control"
-
-                                value={email}
-
-                                onChange={
-                                    e => setEmail(e.target.value)
-                                }
-
-                            />
-
-                        </div>
+                <div className="text-center mb-4">
 
 
+                    <img
 
-                        <div className="mb-3">
+                        src={logo}
 
-                            <label>
-                                Senha
-                            </label>
+                        alt="Dutra Imóveis"
 
-                            <input
+                        style={{
+                            width:"180px"
+                        }}
 
-                                type="password"
-
-                                className="form-control"
-
-                                value={senha}
-
-                                onChange={
-                                    e => setSenha(e.target.value)
-                                }
-
-                            />
-
-                        </div>
+                    />
 
 
+                    <h3 className="mt-3">
 
-                        <button className="btn btn-primary">
+                        Área administrativa
 
-                            Entrar
-
-                        </button>
-
-
-                    </form>
+                    </h3>
 
 
                 </div>
 
+
+
+
+                {erro && (
+
+                    <div className="alert alert-danger">
+
+                        {erro}
+
+                    </div>
+
+                )}
+
+
+
+
+
+
+                <form onSubmit={handleSubmit}>
+
+
+                    <div className="mb-3">
+
+
+                        <label className="form-label">
+
+                            Email
+
+                        </label>
+
+
+                        <input
+
+                            type="email"
+
+                            className="form-control"
+
+                            value={email}
+
+                            onChange={
+                                e => setEmail(e.target.value)
+                            }
+
+                            required
+
+                        />
+
+
+                    </div>
+
+
+
+
+
+                    <div className="mb-3">
+
+
+                        <label className="form-label">
+
+                            Senha
+
+                        </label>
+
+
+                        <input
+
+                            type="password"
+
+                            className="form-control"
+
+                            value={senha}
+
+                            onChange={
+                                e => setSenha(e.target.value)
+                            }
+
+                            required
+
+                        />
+
+
+                    </div>
+
+
+
+
+
+                    <button
+
+                        className="btn btn-primary w-100"
+
+                    >
+
+                        Entrar
+
+                    </button>
+
+
+
+                </form>
+
+
+
+                <div className="text-center mt-3">
+
+
+                    <Link
+
+                        to="/"
+
+                        className="text-decoration-none"
+
+                    >
+
+                        ← Voltar para o site
+
+                    </Link>
+
+
+                </div>
+
+
+
             </div>
 
+
         </div>
+
 
     );
 
