@@ -17,20 +17,17 @@ function Banner() {
 
                 <div className="container text-center text-white">
 
-                    <h1 className="display-3 fw-bold">
+                    <h1 className="fw-bold">
                         Encontre o imóvel ideal
                     </h1>
 
-                    <p className="lead mt-4">
+                    <p className="lead">
                         Casas, apartamentos, terrenos e imóveis comerciais para venda e aluguel.
                     </p>
 
                     <Link
-
                         to="/buscar-imoveis"
-
-                        className="btn btn-primary btn-lg mt-3"
-
+                        className="btn btn-primary btn-lg banner-button"
                     >
                         Ver imóveis
                     </Link>

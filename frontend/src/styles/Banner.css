@@ -1,6 +1,6 @@
-.banner{
+.banner {
 
-    height:550px;
+    height:330px;
 
     background-size:cover;
 
@@ -13,9 +13,12 @@
 }
 
 
-.banner-overlay{
+.banner-overlay {
 
-    background:rgba(0,0,0,.50);
+    background:linear-gradient(
+        rgba(0,0,0,.55),
+        rgba(0,0,0,.35)
+    );
 
     width:100%;
 
@@ -28,15 +31,36 @@
 }
 
 
-.banner h1{
+.banner h1 {
+
+    font-size:2.8rem;
 
     text-shadow:0 3px 8px rgba(0,0,0,.6);
 
 }
 
 
-.banner p{
+.banner p {
+
+    max-width:750px;
+
+    margin:15px auto 0;
+
+    font-size:1.15rem;
 
     text-shadow:0 2px 5px rgba(0,0,0,.5);
+
+}
+
+
+.banner-button {
+
+    margin-top:25px;
+
+    border-radius:30px;
+
+    padding-left:35px;
+
+    padding-right:35px;
 
 }
