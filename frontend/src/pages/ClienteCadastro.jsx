@@ -17,7 +17,18 @@ function ClienteCadastro() {
 
         nome: "",
         email: "",
-        senha: ""
+        senha: "",
+        telefone: "",
+        cpf: "",
+        rg: "",
+        dataNascimento: "",
+        endereco: "",
+        numero: "",
+        complemento: "",
+        bairro: "",
+        cidade: "",
+        estado: "",
+        cep: ""
 
     });
 
@@ -84,6 +95,71 @@ function ClienteCadastro() {
             formData.append(
                 "senha",
                 form.senha
+            );
+
+            formData.append(
+                "telefone",
+                form.telefone
+            );
+
+
+            formData.append(
+                "cpf",
+                form.cpf
+            );
+
+
+            formData.append(
+                "rg",
+                form.rg
+            );
+
+
+            formData.append(
+                "dataNascimento",
+                form.dataNascimento
+            );
+
+
+            formData.append(
+                "endereco",
+                form.endereco
+            );
+
+
+            formData.append(
+                "numero",
+                form.numero
+            );
+
+
+            formData.append(
+                "complemento",
+                form.complemento
+            );
+
+
+            formData.append(
+                "bairro",
+                form.bairro
+            );
+
+
+            formData.append(
+                "cidade",
+                form.cidade
+            );
+
+
+            formData.append(
+                "estado",
+                form.estado
+            );
+
+
+            formData.append(
+                "cep",
+                form.cep
             );
 
 
@@ -278,6 +354,109 @@ function ClienteCadastro() {
 
                         required
 
+                    />
+
+                    <input
+                        className="form-control mb-3"
+                        placeholder="Telefone"
+                        name="telefone"
+                        value={form.telefone}
+                        onChange={alterar}
+                    />
+
+
+                    <input
+                        className="form-control mb-3"
+                        placeholder="CPF"
+                        name="cpf"
+                        value={form.cpf}
+                        onChange={alterar}
+                    />
+
+
+                    <input
+                        className="form-control mb-3"
+                        placeholder="RG"
+                        name="rg"
+                        value={form.rg}
+                        onChange={alterar}
+                    />
+
+
+                    <label>
+                        Data de nascimento
+                    </label>
+
+                    <input
+                        className="form-control mb-3"
+                        type="date"
+                        name="dataNascimento"
+                        value={form.dataNascimento}
+                        onChange={alterar}
+                    />
+
+
+                    <input
+                        className="form-control mb-3"
+                        placeholder="Endereço"
+                        name="endereco"
+                        value={form.endereco}
+                        onChange={alterar}
+                    />
+
+
+                    <input
+                        className="form-control mb-3"
+                        placeholder="Número"
+                        name="numero"
+                        value={form.numero}
+                        onChange={alterar}
+                    />
+
+
+                    <input
+                        className="form-control mb-3"
+                        placeholder="Complemento"
+                        name="complemento"
+                        value={form.complemento}
+                        onChange={alterar}
+                    />
+
+
+                    <input
+                        className="form-control mb-3"
+                        placeholder="Bairro"
+                        name="bairro"
+                        value={form.bairro}
+                        onChange={alterar
+                        }
+                    />
+
+
+                    <input
+                        className="form-control mb-3"
+                        placeholder="Cidade"
+                        name="cidade"
+                        value={form.cidade}
+                        onChange={alterar}
+                    />
+
+
+                    <input
+                        className="form-control mb-3"
+                        placeholder="Estado"
+                        name="estado"
+                        value={form.estado}
+                        onChange={alterar}
+                    />
+
+
+                    <input
+                        className="form-control mb-3"
+                        placeholder="CEP"
+                        name="cep"
+                        value={form.cep}
+                        onChange={alterar}
                     />
 
                     <input

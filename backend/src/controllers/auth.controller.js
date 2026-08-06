@@ -11,7 +11,18 @@ async function register(req, res) {
         const {
             nome,
             email,
-            senha
+            senha,
+            telefone,
+            cpf,
+            rg,
+            dataNascimento,
+            endereco,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            estado,
+            cep
         } = req.body;
 
         const existe = await prisma.user.findUnique({
@@ -93,6 +104,29 @@ async function register(req, res) {
 
         });
 
+        await prisma.cliente.create({
+
+            data: {
+
+                telefone,
+                cpf,
+                rg,
+                dataNascimento: dataNascimento
+                    ? new Date(dataNascimento)
+                    : null,
+                endereco,
+                numero,
+                complemento,
+                bairro,
+                cidade,
+                estado,
+                cep,
+                userId: user.id
+
+            }
+
+        });
+
         res.status(201).json({
 
             message: "Usuário criado com sucesso",
@@ -149,7 +183,9 @@ async function login(req, res) {
 
             include: {
 
-                corretor: true
+                corretor: true,
+
+                cliente: true
 
             }
 
@@ -245,7 +281,9 @@ async function login(req, res) {
 
                 foto: user.foto,
 
-                corretor: user.corretor
+                corretor: user.corretor,
+
+                cliente: user.cliente
 
             }
 
