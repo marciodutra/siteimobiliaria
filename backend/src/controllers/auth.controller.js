@@ -1,33 +1,79 @@
 const prisma = require("../lib/prisma");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const supabase = require("../lib/supabase");
 
 
 async function register(req, res) {
 
     try {
 
-        const { nome, email, senha } = req.body;
-
+        const {
+            nome,
+            email,
+            senha
+        } = req.body;
 
         const existe = await prisma.user.findUnique({
+
             where: {
                 email
             }
-        });
 
+        });
 
         if (existe) {
 
             return res.status(400).json({
+
                 error: "Email já cadastrado"
+
             });
 
         }
 
+        let fotoUrl = null;
+
+        if (req.file) {
+
+            const nomeArquivo =
+                `clientes/${Date.now()}-${req.file.originalname}`;
+
+            const upload = await supabase.storage
+
+                .from(process.env.SUPABASE_BUCKET)
+
+                .upload(
+
+                    nomeArquivo,
+
+                    req.file.buffer,
+
+                    {
+
+                        contentType: req.file.mimetype
+
+                    }
+
+                );
+
+            if (upload.error) {
+
+                throw upload.error;
+
+            }
+
+            const { data } = supabase.storage
+
+                .from(process.env.SUPABASE_BUCKET)
+
+                .getPublicUrl(nomeArquivo);
+
+            fotoUrl = data.publicUrl;
+
+        }
 
         const senhaHash = await bcrypt.hash(senha, 10);
-
 
         const user = await prisma.user.create({
 
@@ -39,12 +85,13 @@ async function register(req, res) {
 
                 senha: senhaHash,
 
-                tipo: "CLIENTE"
+                tipo: "CLIENTE",
+
+                foto: fotoUrl
 
             }
 
         });
-
 
         res.status(201).json({
 
@@ -56,22 +103,23 @@ async function register(req, res) {
 
                 nome: user.nome,
 
-                email: user.email
+                email: user.email,
+
+                tipo: user.tipo,
+
+                foto: user.foto
 
             }
 
         });
 
-
     } catch (error) {
-
 
         res.status(500).json({
 
             error: error.message
 
         });
-
 
     }
 

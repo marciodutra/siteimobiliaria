@@ -15,15 +15,18 @@ function ClienteCadastro() {
 
     const [form, setForm] = useState({
 
-        nome:"",
-        email:"",
-        senha:""
+        nome: "",
+        email: "",
+        senha: ""
 
     });
 
 
+    const [foto, setFoto] = useState(null);
 
-    const [erro,setErro] = useState("");
+
+
+    const [erro, setErro] = useState("");
 
 
 
@@ -43,9 +46,11 @@ function ClienteCadastro() {
 
     }
 
+    function selecionarFoto(e) {
 
+        setFoto(e.target.files[0]);
 
-
+    }
 
 
     async function cadastrar(e) {
@@ -61,11 +66,49 @@ function ClienteCadastro() {
         try {
 
 
+            const formData = new FormData();
+
+
+            formData.append(
+                "nome",
+                form.nome
+            );
+
+
+            formData.append(
+                "email",
+                form.email
+            );
+
+
+            formData.append(
+                "senha",
+                form.senha
+            );
+
+
+            if (foto) {
+
+                formData.append(
+                    "foto",
+                    foto
+                );
+
+            }
+
+
+
             await api.post(
 
                 "/auth/register",
 
-                form
+                formData,
+
+                {
+                    headers: {
+                        "Content-Type": "multipart/form-data"
+                    }
+                }
 
             );
 
@@ -80,7 +123,7 @@ function ClienteCadastro() {
 
 
 
-        } catch(error) {
+        } catch (error) {
 
 
             setErro(
@@ -111,7 +154,7 @@ function ClienteCadastro() {
             className="container d-flex justify-content-center align-items-center"
 
             style={{
-                minHeight:"80vh"
+                minHeight: "80vh"
             }}
 
         >
@@ -122,8 +165,8 @@ function ClienteCadastro() {
                 className="card shadow-sm p-4"
 
                 style={{
-                    width:"400px",
-                    borderRadius:"15px"
+                    width: "400px",
+                    borderRadius: "15px"
                 }}
 
             >
@@ -139,7 +182,7 @@ function ClienteCadastro() {
                         alt="Dutra Imóveis"
 
                         style={{
-                            width:"180px"
+                            width: "180px"
                         }}
 
                     />
@@ -237,9 +280,17 @@ function ClienteCadastro() {
 
                     />
 
+                    <input
 
+                        className="form-control mb-3"
 
+                        type="file"
 
+                        accept="image/*"
+
+                        onChange={selecionarFoto}
+
+                    />
 
                     <button
 

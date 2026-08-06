@@ -1,4 +1,5 @@
 import { useAuth } from "../auth/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 
 function ClienteDashboard() {
@@ -6,46 +7,151 @@ function ClienteDashboard() {
 
     const { user, logout } = useAuth();
 
+    const navigate = useNavigate();
+
+
+
+    function sair() {
+
+        logout();
+
+        navigate("/");
+
+    }
+
+
 
     return (
 
-        <div className="container mt-5">
+        <div className="container mt-5 mb-5">
 
 
-            <div className="card shadow-sm p-5 text-center">
+            <div className="row justify-content-center">
 
 
-                <h2>
-                    Área do Cliente
-                </h2>
+                <div className="col-md-6">
 
 
-                <hr />
+                    <div className="card shadow-sm border-0">
 
 
-                <h4>
-                    Olá, {user?.nome}
-                </h4>
-
-
-                <p>
-                    Email: {user?.email}
-                </p>
+                        <div className="card-body text-center p-5">
 
 
 
-                <button
-                    className="btn btn-outline-danger"
-                    onClick={logout}
-                >
-                    Sair
-                </button>
+                            {
+                                user?.foto ? (
+
+
+                                    <img
+
+                                        src={user.foto}
+
+                                        alt="Foto do cliente"
+
+                                        className="rounded-circle mb-4"
+
+                                        style={{
+
+                                            width: "140px",
+
+                                            height: "140px",
+
+                                            objectFit: "cover"
+
+                                        }}
+
+                                    />
+
+
+                                ) : (
+
+
+                                    <div
+
+                                        className="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto mb-4"
+
+                                        style={{
+
+                                            width: "140px",
+
+                                            height: "140px",
+
+                                            fontSize: "60px"
+
+                                        }}
+
+                                    >
+
+                                        👤
+
+                                    </div>
+
+
+                                )
+                            }
+
+
+
+
+                            <h2 className="fw-bold">
+
+                                Área do Cliente
+
+                            </h2>
+
+
+                            <hr />
+
+
+
+                            <h4>
+
+                                Olá, {user?.nome}
+
+                            </h4>
+
+
+
+
+                            <p>
+
+                                Email: {user?.email}
+
+                            </p>
+
+
+
+
+
+                            <button
+
+                                className="btn btn-outline-danger mt-3"
+
+                                onClick={sair}
+
+                            >
+
+                                Sair
+
+                            </button>
+
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
 
 
             </div>
 
 
         </div>
+
 
     );
 
