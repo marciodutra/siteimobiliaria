@@ -17,6 +17,10 @@ import Comprar from "./pages/Comprar";
 import Alugar from "./pages/Alugar";
 import Mensagens from "./pages/Mensagens";
 import ListaUsuarios from "./pages/ListaUsuarios";
+import Cliente from "./pages/Cliente";
+import ClienteLogin from "./pages/ClienteLogin";
+import ClienteCadastro from "./pages/ClienteCadastro";
+import ClienteDashboard from "./pages/ClienteDashboard";
 
 function App() {
 
@@ -145,6 +149,42 @@ function App() {
             <LayoutSistema>
               <ListaUsuarios />
             </LayoutSistema>
+          }
+        />
+
+        <Route
+          path="/cliente"
+          element={
+            <LayoutSite>
+              <Cliente />
+            </LayoutSite>
+          }
+        />
+
+
+        <Route
+          path="/cliente/login"
+          element={
+            <LayoutSite>
+              <ClienteLogin />
+            </LayoutSite>
+          }
+        />
+
+
+        <Route
+          path="/cliente/cadastro"
+          element={
+            <LayoutSite>
+              <ClienteCadastro />
+            </LayoutSite>
+          }
+        />
+
+        <Route
+          path="/cliente/dashboard"
+          element={
+            <ClienteDashboard />
           }
         />
 

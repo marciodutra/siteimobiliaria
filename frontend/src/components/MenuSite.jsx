@@ -81,7 +81,15 @@ function MenuSite() {
                         className="btn btn-primary rounded-pill px-4 ms-3"
                         to="/login"
                     >
-                        Entrar
+                        Administração
+                    </Link>
+
+
+                    <Link
+                        className="btn btn-outline-primary rounded-pill px-4 ms-3"
+                        to="/cliente"
+                    >
+                        Área do Cliente
                     </Link>
 
                 </div>

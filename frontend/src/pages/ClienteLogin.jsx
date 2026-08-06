@@ -7,7 +7,7 @@ import { useAuth } from "../auth/AuthContext";
 import logo from "../assets/logo.png";
 
 
-function Login() {
+function ClienteLogin() {
 
 
     const [email, setEmail] = useState("");
@@ -20,58 +20,74 @@ function Login() {
 
 
 
-    async function handleSubmit(e) {
+
+
+    async function entrar(e) {
+
 
         e.preventDefault();
 
         setErro("");
 
+
+
         try {
 
 
-            const response = await api.post("/auth/login", {
+            const resposta = await api.post("/auth/login", {
 
                 email,
+
                 senha
 
             });
 
 
 
-            const { token, user } = response.data;
+            const { token, user } = resposta.data;
+
+
+
+            if (user.tipo !== "CLIENTE") {
+
+
+                setErro(
+                    "Este acesso é exclusivo para clientes."
+                );
+
+
+                return;
+
+            }
+
 
 
             login(token, user);
 
 
 
-            if (user.tipo === "CLIENTE") {
+            navigate("/cliente/dashboard");
 
 
-                navigate("/cliente/dashboard");
 
-
-            } else {
-
-
-                navigate("/dashboard");
-
-
-            }
-
-
-        } catch (error) {
+        } catch(error) {
 
 
             setErro(
+
                 error.response?.data?.error ||
+
                 "Erro ao realizar login"
+
             );
 
 
         }
 
+
     }
+
+
 
 
 
@@ -79,20 +95,28 @@ function Login() {
 
 
         <div
+
             className="container d-flex justify-content-center align-items-center"
+
             style={{
-                minHeight: "80vh"
+                minHeight:"80vh"
             }}
+
         >
 
 
+
             <div
+
                 className="card shadow-sm p-4"
+
                 style={{
-                    width: "400px",
-                    borderRadius: "15px"
+                    width:"400px",
+                    borderRadius:"15px"
                 }}
+
             >
+
 
 
                 <div className="text-center mb-4">
@@ -105,7 +129,7 @@ function Login() {
                         alt="Dutra Imóveis"
 
                         style={{
-                            width: "180px"
+                            width:"180px"
                         }}
 
                     />
@@ -113,7 +137,7 @@ function Login() {
 
                     <h3 className="mt-3">
 
-                        Área administrativa
+                        Área do Cliente
 
                     </h3>
 
@@ -123,22 +147,24 @@ function Login() {
 
 
 
-                {erro && (
 
-                    <div className="alert alert-danger">
+                {
+                    erro && (
 
-                        {erro}
+                        <div className="alert alert-danger">
 
-                    </div>
+                            {erro}
 
-                )}
+                        </div>
+
+                    )
+                }
 
 
 
 
 
-
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={entrar}>
 
 
                     <div className="mb-3">
@@ -153,9 +179,9 @@ function Login() {
 
                         <input
 
-                            type="email"
-
                             className="form-control"
+
+                            type="email"
 
                             value={email}
 
@@ -186,9 +212,9 @@ function Login() {
 
                         <input
 
-                            type="password"
-
                             className="form-control"
+
+                            type="password"
 
                             value={senha}
 
@@ -223,7 +249,25 @@ function Login() {
 
 
 
+
+
                 <div className="text-center mt-3">
+
+
+                    <Link
+
+                        to="/cliente/cadastro"
+
+                        className="text-decoration-none"
+
+                    >
+
+                        Primeiro acesso
+
+                    </Link>
+
+
+                    <br />
 
 
                     <Link
@@ -243,6 +287,7 @@ function Login() {
 
 
 
+
             </div>
 
 
@@ -251,7 +296,8 @@ function Login() {
 
     );
 
+
 }
 
 
-export default Login;
+export default ClienteLogin;
