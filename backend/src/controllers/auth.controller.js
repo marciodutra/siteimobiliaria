@@ -185,7 +185,6 @@ async function login(req, res) {
 
             token,
 
-
             user: {
 
                 id: user.id,
@@ -195,6 +194,8 @@ async function login(req, res) {
                 email: user.email,
 
                 tipo: user.tipo,
+
+                foto: user.foto,
 
                 corretor: user.corretor
 

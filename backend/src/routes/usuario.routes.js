@@ -25,13 +25,23 @@ router.post(
 );
 
 
-router.get("/", listarUsuarios);
+router.get(
+    "/",
+    listarUsuarios
+);
 
 
-router.put("/:id", editarUsuario);
+router.put(
+    "/:id",
+    upload.single("foto"),
+    editarUsuario
+);
 
 
-router.delete("/:id", excluirUsuario);
+router.delete(
+    "/:id",
+    excluirUsuario
+);
 
 
 module.exports = router;

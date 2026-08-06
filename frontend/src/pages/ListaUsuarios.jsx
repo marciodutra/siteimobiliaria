@@ -11,6 +11,8 @@ function ListaUsuarios() {
 
     const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
 
+    const [fotoSelecionada, setFotoSelecionada] = useState(null);
+
 
 
     async function carregarUsuarios() {
@@ -86,30 +88,70 @@ function ListaUsuarios() {
 
 
 
-
-
     async function salvarEdicao(usuario) {
 
 
         try {
 
 
+            const formData = new FormData();
+
+
+            formData.append(
+                "nome",
+                usuario.nome
+            );
+
+
+            formData.append(
+                "email",
+                usuario.email
+            );
+
+
+            formData.append(
+                "tipo",
+                usuario.tipo
+            );
+
+
+
+            if (fotoSelecionada) {
+
+
+                formData.append(
+                    "foto",
+                    fotoSelecionada
+                );
+
+
+            }
+
+
+
+
+
             await api.put(
 
                 `/usuarios/${usuario.id}`,
 
+                formData,
+
                 {
 
-                    nome: usuario.nome,
+                    headers: {
 
-                    email: usuario.email,
+                        "Content-Type": "multipart/form-data"
 
-                    tipo: usuario.tipo
+                    }
 
                 }
 
             );
 
+
+
+            setFotoSelecionada(null);
 
             setEditando(null);
 
@@ -137,7 +179,6 @@ function ListaUsuarios() {
 
 
 
-
     function alterarEdicao(e) {
 
 
@@ -156,8 +197,15 @@ function ListaUsuarios() {
 
 
 
+    function selecionarFoto(e) {
 
 
+        setFotoSelecionada(
+            e.target.files[0]
+        );
+
+
+    }
 
     return (
 
@@ -168,6 +216,7 @@ function ListaUsuarios() {
             <h2>
                 Gerenciar usuários
             </h2>
+
 
 
 
@@ -182,16 +231,24 @@ function ListaUsuarios() {
                         <tr>
 
                             <th>
+                                Foto
+                            </th>
+
+
+                            <th>
                                 Nome
                             </th>
+
 
                             <th>
                                 Email
                             </th>
 
+
                             <th>
                                 Tipo
                             </th>
+
 
                             <th>
                                 Ações
@@ -212,6 +269,42 @@ function ListaUsuarios() {
 
 
                                 <tr key={usuario.id}>
+
+
+                                    <td>
+
+
+                                        {
+                                            usuario.foto && (
+
+                                                <img
+
+                                                    src={usuario.foto}
+
+                                                    alt="Foto"
+
+                                                    style={{
+
+                                                        width: "50px",
+
+                                                        height: "50px",
+
+                                                        objectFit: "cover",
+
+                                                        borderRadius: "50%"
+
+                                                    }}
+
+                                                />
+
+                                            )
+                                        }
+
+
+                                    </td>
+
+
+
 
 
                                     <td>
@@ -292,35 +385,43 @@ function ListaUsuarios() {
                                             editando?.id === usuario.id ? (
 
 
-                                                <select
+                                                <>
 
-                                                    className="form-control"
+                                                    <select
 
-                                                    name="tipo"
+                                                        className="form-control mb-2"
 
-                                                    value={editando.tipo}
+                                                        name="tipo"
 
-                                                    onChange={alterarEdicao}
+                                                        value={editando.tipo}
 
-                                                >
+                                                        onChange={alterarEdicao}
 
+                                                    >
 
-                                                    <option value="ADMIN">
-                                                        ADMIN
-                                                    </option>
-
-
-                                                    <option value="CORRETOR">
-                                                        CORRETOR
-                                                    </option>
+                                                        <option value="ADMIN">
+                                                            ADMIN
+                                                        </option>
 
 
-                                                    <option value="CLIENTE">
-                                                        CLIENTE
-                                                    </option>
+                                                        <option value="CORRETOR">
+                                                            CORRETOR
+                                                        </option>
 
 
-                                                </select>
+                                                    </select>
+
+
+
+                                                    <input
+                                                        type="file"
+                                                        className="form-control"
+                                                        accept="image/*"
+                                                        onChange={selecionarFoto}
+                                                    />
+
+
+                                                </>
 
 
                                             ) : (
@@ -369,7 +470,13 @@ function ListaUsuarios() {
 
                                                         className="btn btn-primary"
 
-                                                        onClick={() => setEditando(usuario)}
+                                                        onClick={() => {
+
+                                                            setEditando(usuario);
+
+                                                            setFotoSelecionada(null);
+
+                                                        }}
 
                                                     >
 
@@ -421,6 +528,11 @@ function ListaUsuarios() {
 
             </div>
 
+
+
+
+
+
             <div className="d-block d-md-none mt-4">
 
 
@@ -429,70 +541,131 @@ function ListaUsuarios() {
 
 
                         <div
+
                             className="card mb-3 shadow-sm"
+
                             key={usuario.id}
+
                         >
+
 
                             <div className="card-body">
 
 
+
+                                {
+                                    usuario.foto && (
+
+
+                                        <img
+
+                                            src={usuario.foto}
+
+                                            alt="Foto"
+
+                                            className="mb-3"
+
+                                            style={{
+
+                                                width: "80px",
+
+                                                height: "80px",
+
+                                                borderRadius: "50%",
+
+                                                objectFit: "cover"
+
+                                            }}
+
+                                        />
+
+
+                                    )
+                                }
+
+
+
                                 <h5>
+
                                     {usuario.nome}
+
                                 </h5>
 
 
+
+
                                 <p>
+
                                     <strong>Email:</strong>
+
                                     <br />
+
                                     {usuario.email}
+
                                 </p>
+
+
 
 
                                 <p>
+
                                     <strong>Tipo:</strong>
+
                                     <br />
+
                                     {usuario.tipo}
+
                                 </p>
+
+
+
 
                                 {
                                     usuarioSelecionado?.id === usuario.id && (
 
+
                                         <div className="mt-3 border rounded p-3">
+
 
                                             <input
 
                                                 className="form-control mb-2"
-
-                                                name="nome"
 
                                                 value={usuarioSelecionado.nome}
 
                                                 onChange={(e) =>
                                                     setUsuarioSelecionado({
+
                                                         ...usuarioSelecionado,
+
                                                         nome: e.target.value
+
                                                     })
                                                 }
 
                                             />
+
 
 
                                             <input
 
                                                 className="form-control mb-2"
 
-                                                name="email"
-
                                                 value={usuarioSelecionado.email}
 
                                                 onChange={(e) =>
                                                     setUsuarioSelecionado({
+
                                                         ...usuarioSelecionado,
+
                                                         email: e.target.value
+
                                                     })
                                                 }
 
                                             />
+
+
 
 
                                             <select
@@ -503,8 +676,11 @@ function ListaUsuarios() {
 
                                                 onChange={(e) =>
                                                     setUsuarioSelecionado({
+
                                                         ...usuarioSelecionado,
+
                                                         tipo: e.target.value
+
                                                     })
                                                 }
 
@@ -514,15 +690,23 @@ function ListaUsuarios() {
                                                     ADMIN
                                                 </option>
 
+
                                                 <option value="CORRETOR">
                                                     CORRETOR
                                                 </option>
 
-                                                <option value="CLIENTE">
-                                                    CLIENTE
-                                                </option>
 
                                             </select>
+
+
+
+                                            <input
+                                                type="file"
+                                                className="form-control mb-2"
+                                                accept="image/*"
+                                                onChange={selecionarFoto}
+                                            />
+
 
 
                                             <button
@@ -540,8 +724,12 @@ function ListaUsuarios() {
 
                                         </div>
 
+
                                     )
                                 }
+
+
+
 
 
 
@@ -552,13 +740,21 @@ function ListaUsuarios() {
 
                                         className="btn btn-primary"
 
-                                        onClick={() => setUsuarioSelecionado(usuario)}
+                                        onClick={() => {
+
+                                            setUsuarioSelecionado(usuario);
+
+                                            setFotoSelecionada(null);
+
+                                        }}
 
                                     >
 
                                         Editar
 
                                     </button>
+
+
 
 
 
@@ -579,6 +775,7 @@ function ListaUsuarios() {
 
 
                             </div>
+
 
                         </div>
 

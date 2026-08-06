@@ -105,19 +105,13 @@ async function criarUsuario(req, res) {
 
 
         const user = await prisma.user.create({
-
             data: {
-
                 nome,
-
                 email,
-
                 senha: senhaHash,
-
-                tipo
-
+                tipo,
+                foto: fotoUrl
             }
-
         });
 
 
@@ -129,24 +123,13 @@ async function criarUsuario(req, res) {
 
 
             await prisma.corretor.create({
-
                 data: {
-
                     nome,
-
                     telefone,
-
                     creci,
-
-                    foto: fotoUrl,
-
                     userId: user.id
-
                 }
-
             });
-
-
 
         }
 
@@ -200,6 +183,8 @@ async function criarUsuario(req, res) {
 
 
 
+
+
 async function listarUsuarios(req, res) {
 
 
@@ -210,37 +195,19 @@ async function listarUsuarios(req, res) {
 
 
             select: {
-
                 id: true,
-
                 nome: true,
-
                 email: true,
-
                 tipo: true,
-
+                foto: true,
                 createdAt: true,
 
-
                 corretor: {
-
-
                     select: {
-
-
                         telefone: true,
-
-                        creci: true,
-
-                        foto: true
-
-
+                        creci: true
                     }
-
-
                 }
-
-
             }
 
 
@@ -273,6 +240,8 @@ async function listarUsuarios(req, res) {
 
 
 
+
+
 async function editarUsuario(req, res) {
 
 
@@ -294,31 +263,77 @@ async function editarUsuario(req, res) {
 
 
 
-
-        const usuario = await prisma.user.update({
-
-
-            where: {
-
-                id: Number(id)
-
-            },
+        let fotoUrl = null;
 
 
-            data: {
 
-                nome,
 
-                email,
+        if (req.file) {
 
-                tipo
+
+            const nomeArquivo =
+                `corretores/${Date.now()}-${req.file.originalname}`;
+
+
+
+            const upload = await supabase.storage
+
+                .from(process.env.SUPABASE_BUCKET)
+
+                .upload(
+
+                    nomeArquivo,
+
+                    req.file.buffer,
+
+                    {
+
+                        contentType: req.file.mimetype
+
+                    }
+
+                );
+
+
+
+            if (upload.error) {
+
+                throw upload.error;
 
             }
 
 
+
+            const { data } = supabase.storage
+
+                .from(process.env.SUPABASE_BUCKET)
+
+                .getPublicUrl(nomeArquivo);
+
+
+
+            fotoUrl = data.publicUrl;
+
+
+        }
+
+
+
+
+        const usuario = await prisma.user.update({
+
+            where: {
+                id: Number(id)
+            },
+
+            data: {
+                nome,
+                email,
+                tipo,
+                ...(fotoUrl && { foto: fotoUrl })
+            }
+
         });
-
-
 
 
         res.json(usuario);
@@ -328,6 +343,9 @@ async function editarUsuario(req, res) {
     } catch (error) {
 
 
+        console.log(error);
+
+
         res.status(500).json({
 
             error: error.message
@@ -335,10 +353,13 @@ async function editarUsuario(req, res) {
         });
 
 
+
     }
 
 
 }
+
+
 
 
 
@@ -381,6 +402,7 @@ async function excluirUsuario(req, res) {
 
 
 
+
         if (!usuario) {
 
 
@@ -392,6 +414,8 @@ async function excluirUsuario(req, res) {
 
 
         }
+
+
 
 
 
@@ -423,6 +447,8 @@ async function excluirUsuario(req, res) {
 
 
 
+
+
         await prisma.user.delete({
 
 
@@ -441,11 +467,15 @@ async function excluirUsuario(req, res) {
 
 
 
+
+
         res.json({
 
             message: "Usuário excluído"
 
         });
+
+
 
 
 
@@ -467,10 +497,6 @@ async function excluirUsuario(req, res) {
 
 
 }
-
-
-
-
 
 
 module.exports = {

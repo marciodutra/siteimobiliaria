@@ -13,6 +13,7 @@ model User {
   email     String      @unique
   senha     String
   tipo      TipoUsuario
+  foto      String?
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
   corretor  Corretor?
@@ -23,7 +24,6 @@ model Corretor {
   nome      String
   telefone  String
   creci     String   @unique
-  foto      String?
   userId    Int      @unique
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])

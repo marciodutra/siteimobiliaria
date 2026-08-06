@@ -28,12 +28,12 @@ function Dashboard() {
 
 
                             {
-                                user?.corretor?.foto ? (
+                                user?.foto ? (
 
 
                                     <img
 
-                                        src={user.corretor.foto}
+                                        src={user.foto}
 
                                         alt="Foto do usuário"
 
