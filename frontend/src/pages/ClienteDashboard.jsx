@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { useAuth } from "../auth/AuthContext";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 
 
 function ClienteDashboard() {
@@ -8,6 +10,46 @@ function ClienteDashboard() {
     const { user, logout } = useAuth();
 
     const navigate = useNavigate();
+
+
+    const [editando, setEditando] = useState(false);
+
+    const [foto, setFoto] = useState(null);
+
+
+    const [dados, setDados] = useState({
+
+        nome: user?.nome || "",
+
+        email: user?.email || "",
+
+        telefone: user?.cliente?.telefone || "",
+
+        cpf: user?.cliente?.cpf || "",
+
+        rg: user?.cliente?.rg || "",
+
+        dataNascimento: user?.cliente?.dataNascimento
+            ?
+            user.cliente.dataNascimento.substring(0,10)
+            :
+            "",
+
+        endereco: user?.cliente?.endereco || "",
+
+        numero: user?.cliente?.numero || "",
+
+        complemento: user?.cliente?.complemento || "",
+
+        bairro: user?.cliente?.bairro || "",
+
+        cidade: user?.cliente?.cidade || "",
+
+        estado: user?.cliente?.estado || "",
+
+        cep: user?.cliente?.cep || ""
+
+    });
 
 
 
@@ -21,6 +63,130 @@ function ClienteDashboard() {
 
 
 
+    function alterar(e) {
+
+        setDados({
+
+            ...dados,
+
+            [e.target.name]: e.target.value
+
+        });
+
+    }
+
+
+
+    function selecionarFoto(e) {
+
+        setFoto(e.target.files[0]);
+
+    }
+
+
+
+
+    async function salvar() {
+
+
+        try {
+
+
+            const formData = new FormData();
+
+
+
+            Object.keys(dados).forEach(campo => {
+
+                formData.append(
+
+                    campo,
+
+                    dados[campo]
+
+                );
+
+            });
+
+
+
+            formData.append(
+
+                "tipo",
+
+                "CLIENTE"
+
+            );
+
+
+
+
+            if (foto) {
+
+                formData.append(
+
+                    "foto",
+
+                    foto
+
+                );
+
+            }
+
+
+
+
+            await api.put(
+
+                `/usuarios/${user.id}`,
+
+                formData,
+
+                {
+
+                    headers: {
+
+                        "Content-Type":
+                            "multipart/form-data"
+
+                    }
+
+                }
+
+            );
+
+
+
+            alert(
+                "Dados atualizados"
+            );
+
+
+            setEditando(false);
+
+
+            window.location.reload();
+
+
+
+        } catch(error) {
+
+
+            console.log(error);
+
+            alert(
+                "Erro ao atualizar dados"
+            );
+
+
+        }
+
+
+    }
+
+
+
+
     return (
 
         <div className="container mt-5 mb-5">
@@ -31,7 +197,6 @@ function ClienteDashboard() {
                 Área do Cliente
 
             </h2>
-
 
 
             <div className="row g-4">
@@ -50,7 +215,6 @@ function ClienteDashboard() {
 
                             {
                                 user?.foto ? (
-
 
                                     <img
 
@@ -72,9 +236,7 @@ function ClienteDashboard() {
 
                                     />
 
-
                                 ) : (
-
 
                                     <div
 
@@ -95,7 +257,6 @@ function ClienteDashboard() {
                                         👤
 
                                     </div>
-
 
                                 )
                             }
@@ -139,7 +300,6 @@ function ClienteDashboard() {
                             </button>
 
 
-
                         </div>
 
 
@@ -147,11 +307,6 @@ function ClienteDashboard() {
 
 
                 </div>
-
-
-
-
-
                 <div className="col-md-8">
 
 
@@ -162,16 +317,237 @@ function ClienteDashboard() {
 
 
 
-                            <h4 className="fw-bold mb-4">
+                            <div className="d-flex justify-content-between align-items-center mb-4">
 
-                                Meus dados
 
-                            </h4>
+                                <h4 className="fw-bold mb-0">
+
+                                    Meus dados
+
+                                </h4>
+
+
+
+                                <button
+
+                                    className="btn btn-primary"
+
+                                    onClick={() => setEditando(true)}
+
+                                >
+
+                                    Editar dados
+
+                                </button>
+
+
+                            </div>
+
+
+
+
+
+                            {
+                                editando && (
+
+                                    <div className="card bg-light p-3 mb-4">
+
+
+                                        <div className="row">
+
+
+
+                                            <div className="col-md-6 mb-3">
+
+                                                <label className="fw-bold">
+
+                                                    Nome
+
+                                                </label>
+
+
+                                                <input
+
+                                                    className="form-control"
+
+                                                    name="nome"
+
+                                                    value={dados.nome}
+
+                                                    onChange={alterar}
+
+                                                />
+
+                                            </div>
+
+
+
+
+                                            <div className="col-md-6 mb-3">
+
+                                                <label className="fw-bold">
+
+                                                    Email
+
+                                                </label>
+
+
+                                                <input
+
+                                                    className="form-control"
+
+                                                    name="email"
+
+                                                    value={dados.email}
+
+                                                    onChange={alterar}
+
+                                                />
+
+                                            </div>
+
+
+
+
+                                            {
+                                                Object.keys(dados)
+                                                .filter(
+                                                    campo =>
+                                                    campo !== "nome" &&
+                                                    campo !== "email"
+                                                )
+                                                .map((campo)=>(
+
+
+                                                    <div
+
+                                                        className="col-md-6 mb-3"
+
+                                                        key={campo}
+
+                                                    >
+
+
+                                                        <label className="fw-bold">
+
+                                                            {
+                                                                campo
+                                                                    .replace(
+                                                                        /([A-Z])/g,
+                                                                        " $1"
+                                                                    )
+                                                                    .replace(
+                                                                        /^./,
+                                                                        letra =>
+                                                                        letra.toUpperCase()
+                                                                    )
+                                                            }
+
+                                                        </label>
+
+
+                                                        <input
+
+                                                            className="form-control"
+
+                                                            type={
+                                                                campo === "dataNascimento"
+                                                                ?
+                                                                "date"
+                                                                :
+                                                                "text"
+                                                            }
+
+                                                            name={campo}
+
+                                                            value={dados[campo]}
+
+                                                            onChange={alterar}
+
+                                                        />
+
+
+                                                    </div>
+
+
+                                                ))
+                                            }
+
+
+
+
+                                            <div className="col-md-12 mb-3">
+
+
+                                                <label className="fw-bold">
+
+                                                    Nova foto
+
+                                                </label>
+
+
+                                                <input
+
+                                                    type="file"
+
+                                                    className="form-control"
+
+                                                    accept="image/*"
+
+                                                    onChange={selecionarFoto}
+
+                                                />
+
+
+                                            </div>
+
+
+
+                                        </div>
+
+
+
+
+                                        <button
+
+                                            className="btn btn-success me-2"
+
+                                            onClick={salvar}
+
+                                        >
+
+                                            Salvar alterações
+
+                                        </button>
+
+
+
+                                        <button
+
+                                            className="btn btn-secondary"
+
+                                            onClick={() => setEditando(false)}
+
+                                        >
+
+                                            Cancelar
+
+                                        </button>
+
+
+
+                                    </div>
+
+
+                                )
+                            }
+
+
+
 
 
 
                             <div className="row">
-
 
 
                                 <div className="col-md-6 mb-3">
@@ -182,16 +558,13 @@ function ClienteDashboard() {
 
                                     <br />
 
-                                    {user?.cliente?.telefone}
-
+                                    {user?.cliente?.telefone || "-"}
 
                                 </div>
 
 
 
-
                                 <div className="col-md-6 mb-3">
-
 
                                     <strong>
                                         CPF
@@ -199,16 +572,13 @@ function ClienteDashboard() {
 
                                     <br />
 
-                                    {user?.cliente?.cpf}
-
+                                    {user?.cliente?.cpf || "-"}
 
                                 </div>
 
 
 
-
                                 <div className="col-md-6 mb-3">
-
 
                                     <strong>
                                         RG
@@ -216,16 +586,13 @@ function ClienteDashboard() {
 
                                     <br />
 
-                                    {user?.cliente?.rg}
-
+                                    {user?.cliente?.rg || "-"}
 
                                 </div>
 
 
 
-
                                 <div className="col-md-6 mb-3">
-
 
                                     <strong>
                                         Data nascimento
@@ -233,23 +600,22 @@ function ClienteDashboard() {
 
                                     <br />
 
-
                                     {
                                         user?.cliente?.dataNascimento
-                                        &&
+                                        ?
                                         new Date(
                                             user.cliente.dataNascimento
-                                        ).toLocaleDateString("pt-BR")
+                                        )
+                                        .toLocaleDateString("pt-BR")
+                                        :
+                                        "-"
                                     }
-
 
                                 </div>
 
 
 
-
                                 <div className="col-md-12 mb-3">
-
 
                                     <strong>
                                         Endereço
@@ -257,13 +623,12 @@ function ClienteDashboard() {
 
                                     <br />
 
-                                    {user?.cliente?.endereco}
+                                    {user?.cliente?.endereco || "-"}
 
                                     {
                                         user?.cliente?.numero &&
                                         `, ${user.cliente.numero}`
                                     }
-
 
                                 </div>
 
@@ -271,7 +636,6 @@ function ClienteDashboard() {
 
 
                                 <div className="col-md-6 mb-3">
-
 
                                     <strong>
                                         Bairro
@@ -279,8 +643,7 @@ function ClienteDashboard() {
 
                                     <br />
 
-                                    {user?.cliente?.bairro}
-
+                                    {user?.cliente?.bairro || "-"}
 
                                 </div>
 
@@ -288,7 +651,6 @@ function ClienteDashboard() {
 
 
                                 <div className="col-md-6 mb-3">
-
 
                                     <strong>
                                         Cidade / Estado
@@ -296,12 +658,11 @@ function ClienteDashboard() {
 
                                     <br />
 
-                                    {user?.cliente?.cidade}
+                                    {user?.cliente?.cidade || "-"}
 
                                     {" - "}
 
-                                    {user?.cliente?.estado}
-
+                                    {user?.cliente?.estado || "-"}
 
                                 </div>
 
@@ -310,18 +671,15 @@ function ClienteDashboard() {
 
                                 <div className="col-md-6 mb-3">
 
-
                                     <strong>
                                         CEP
                                     </strong>
 
                                     <br />
 
-                                    {user?.cliente?.cep}
-
+                                    {user?.cliente?.cep || "-"}
 
                                 </div>
-
 
 
                             </div>
@@ -335,18 +693,16 @@ function ClienteDashboard() {
 
 
 
-                    <div className="row mt-4 g-3">
 
+
+                    <div className="row mt-4 g-3">
 
 
                         <div className="col-md-4">
 
-
                             <div className="card shadow-sm border-0 text-center">
 
-
                                 <div className="card-body">
-
 
                                     🏠
 
@@ -356,12 +712,9 @@ function ClienteDashboard() {
 
                                     </h6>
 
-
                                 </div>
 
-
                             </div>
-
 
                         </div>
 
@@ -370,12 +723,9 @@ function ClienteDashboard() {
 
                         <div className="col-md-4">
 
-
                             <div className="card shadow-sm border-0 text-center">
 
-
                                 <div className="card-body">
-
 
                                     📄
 
@@ -385,12 +735,9 @@ function ClienteDashboard() {
 
                                     </h6>
 
-
                                 </div>
 
-
                             </div>
-
 
                         </div>
 
@@ -399,12 +746,9 @@ function ClienteDashboard() {
 
                         <div className="col-md-4">
 
-
                             <div className="card shadow-sm border-0 text-center">
 
-
                                 <div className="card-body">
-
 
                                     💳
 
@@ -414,18 +758,16 @@ function ClienteDashboard() {
 
                                     </h6>
 
-
                                 </div>
 
-
                             </div>
-
 
                         </div>
 
 
 
                     </div>
+
 
 
 
@@ -437,6 +779,7 @@ function ClienteDashboard() {
 
 
         </div>
+
 
     );
 

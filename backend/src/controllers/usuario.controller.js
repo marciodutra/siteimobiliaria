@@ -244,57 +244,48 @@ async function listarUsuarios(req, res) {
 
 async function editarUsuario(req, res) {
 
-
     try {
 
-
         const { id } = req.params;
-
 
         const {
 
             nome,
-
             email,
+            tipo,
 
-            tipo
+            telefone,
+            cpf,
+            rg,
+            dataNascimento,
+            endereco,
+            numero,
+            complemento,
+            bairro,
+            cidade,
+            estado,
+            cep
 
         } = req.body;
-
 
 
         let fotoUrl = null;
 
 
-
-
         if (req.file) {
-
 
             const nomeArquivo =
                 `corretores/${Date.now()}-${req.file.originalname}`;
 
-
-
             const upload = await supabase.storage
-
                 .from(process.env.SUPABASE_BUCKET)
-
                 .upload(
-
                     nomeArquivo,
-
                     req.file.buffer,
-
                     {
-
                         contentType: req.file.mimetype
-
                     }
-
                 );
-
-
 
             if (upload.error) {
 
@@ -302,22 +293,13 @@ async function editarUsuario(req, res) {
 
             }
 
-
-
             const { data } = supabase.storage
-
                 .from(process.env.SUPABASE_BUCKET)
-
                 .getPublicUrl(nomeArquivo);
-
-
 
             fotoUrl = data.publicUrl;
 
-
         }
-
-
 
 
         const usuario = await prisma.user.update({
@@ -336,15 +318,69 @@ async function editarUsuario(req, res) {
         });
 
 
+        if (tipo === "CLIENTE") {
+
+            await prisma.cliente.update({
+
+                where: {
+
+                    userId: Number(id)
+
+                },
+
+                data: {
+
+                    telefone,
+                    cpf,
+                    rg,
+
+                    dataNascimento:
+                        dataNascimento
+                            ? new Date(dataNascimento)
+                            : null,
+
+                    endereco,
+                    numero,
+                    complemento,
+                    bairro,
+                    cidade,
+                    estado,
+                    cep
+
+                }
+
+            });
+
+        }
+
+
+        if (tipo === "CORRETOR") {
+
+            await prisma.corretor.update({
+
+                where: {
+
+                    userId: Number(id)
+
+                },
+
+                data: {
+
+                    nome,
+                    telefone: telefone || ""
+
+                }
+
+            });
+
+        }
+
+
         res.json(usuario);
-
-
 
     } catch (error) {
 
-
         console.log(error);
-
 
         res.status(500).json({
 
@@ -352,19 +388,9 @@ async function editarUsuario(req, res) {
 
         });
 
-
-
     }
 
-
 }
-
-
-
-
-
-
-
 
 
 async function excluirUsuario(req, res) {
