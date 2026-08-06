@@ -29,6 +29,7 @@ model Corretor {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
   imoveis   Imovel[]
+  contratos Contrato[]
 }
 
 model Imovel {
@@ -55,6 +56,7 @@ model Imovel {
   imagens    Imagem[]
   corretor   Corretor     @relation(fields: [corretorId], references: [id])
   mensagens  Mensagem[]
+  contratos Contrato[]
 }
 
 model Imagem {
@@ -117,5 +119,51 @@ model Cliente {
   createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  contratos Contrato[]
+
+}
+
+model Contrato {
+
+  id Int @id @default(autoincrement())
+
+  tipo TipoNegocio
+
+  valor Decimal @db.Decimal(12,2)
+
+  dataInicio DateTime @default(now())
+
+  dataFim DateTime?
+
+  status StatusContrato @default(ATIVO)
+
+
+  clienteId Int
+
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+
+
+  imovelId Int
+
+  imovel Imovel @relation(fields: [imovelId], references: [id])
+
+
+  corretorId Int
+
+  corretor Corretor @relation(fields: [corretorId], references: [id])
+
+
+  createdAt DateTime @default(now())
+
+}
+
+enum StatusContrato {
+
+  ATIVO
+
+  ENCERRADO
+
+  PENDENTE
 
 }

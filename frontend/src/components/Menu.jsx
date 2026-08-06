@@ -127,6 +127,14 @@ function Menu() {
                                 </Link>
 
 
+                                <Link
+                                    className="btn btn-outline-light"
+                                    to="/contratos"
+                                >
+                                    Contratos
+                                </Link>
+
+
 
                                 <Link
                                     className="btn btn-outline-light"

@@ -207,6 +207,12 @@ async function listarUsuarios(req, res) {
                         telefone: true,
                         creci: true
                     }
+                },
+
+                cliente: {
+                    select: {
+                        id: true
+                    }
                 }
             }
 

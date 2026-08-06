@@ -21,6 +21,8 @@ import Cliente from "./pages/Cliente";
 import ClienteLogin from "./pages/ClienteLogin";
 import ClienteCadastro from "./pages/ClienteCadastro";
 import ClienteDashboard from "./pages/ClienteDashboard";
+import Contratos from "./pages/Contratos";
+import NovoContrato from "./pages/NovoContrato";
 
 function App() {
 
@@ -185,6 +187,24 @@ function App() {
           path="/cliente/dashboard"
           element={
             <ClienteDashboard />
+          }
+        />
+
+        <Route
+          path="/contratos"
+          element={
+            <LayoutSistema>
+              <Contratos />
+            </LayoutSistema>
+          }
+        />
+
+        <Route
+          path="/novo-contrato"
+          element={
+            <LayoutSistema>
+              <NovoContrato />
+            </LayoutSistema>
           }
         />
 
