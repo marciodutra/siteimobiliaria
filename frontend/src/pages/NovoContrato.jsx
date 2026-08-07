@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/api";
 import { useNavigate } from "react-router-dom";
-
+import { useAuth } from "../auth/AuthContext";
 
 
 function NovoContrato() {
@@ -9,6 +9,7 @@ function NovoContrato() {
 
     const navigate = useNavigate();
 
+    const { user } = useAuth();
 
     const [clientes, setClientes] = useState([]);
 
@@ -18,7 +19,7 @@ function NovoContrato() {
 
     const [form, setForm] = useState({
 
-        tipo: "VENDA",
+        tipo: "",
         valor: "",
         dataInicio: "",
         dataFim: "",
@@ -32,6 +33,7 @@ function NovoContrato() {
 
 
 
+
     async function carregarDados() {
 
 
@@ -39,6 +41,7 @@ function NovoContrato() {
 
 
             const usuarios = await api.get("/usuarios");
+
 
 
             const listaClientes = usuarios.data.filter(
@@ -54,10 +57,25 @@ function NovoContrato() {
 
 
 
+
+
+
+
             const respostaImoveis = await api.get("/imoveis");
 
 
-            setImoveis(respostaImoveis.data);
+
+            const disponiveis = respostaImoveis.data.filter(
+
+                imovel =>
+                    imovel.status === "DISPONIVEL" &&
+                    imovel.corretor?.userId === user.id
+
+            );
+
+
+
+            setImoveis(disponiveis);
 
 
 
@@ -77,6 +95,8 @@ function NovoContrato() {
 
 
 
+
+
     function alterarCampo(e) {
 
 
@@ -84,14 +104,20 @@ function NovoContrato() {
 
 
 
+
+
         if (name === "imovelId") {
+
 
 
             const imovelSelecionado = imoveis.find(
 
-                imovel => imovel.id === Number(value)
+                imovel =>
+                    imovel.id === Number(value)
 
             );
+
+
 
 
 
@@ -103,6 +129,11 @@ function NovoContrato() {
 
                 valor: imovelSelecionado
                     ? imovelSelecionado.valor
+                    : "",
+
+
+                tipo: imovelSelecionado
+                    ? imovelSelecionado.negocio
                     : ""
 
             });
@@ -111,7 +142,10 @@ function NovoContrato() {
 
             return;
 
+
         }
+
+
 
 
 
@@ -125,7 +159,9 @@ function NovoContrato() {
         });
 
 
+
     }
+
 
 
 
@@ -142,6 +178,7 @@ function NovoContrato() {
 
 
         try {
+
 
 
             await api.post(
@@ -165,6 +202,7 @@ function NovoContrato() {
         } catch (error) {
 
 
+
             alert(
 
                 error.response?.data?.error ||
@@ -186,13 +224,17 @@ function NovoContrato() {
 
 
 
+
     useEffect(() => {
 
+        if (user) {
 
-        carregarDados();
+            carregarDados();
 
+        }
 
-    }, []);
+    }, [user]);
+
 
 
 
@@ -202,6 +244,7 @@ function NovoContrato() {
 
 
     return (
+
 
 
         <div className="container mt-5">
@@ -218,9 +261,6 @@ function NovoContrato() {
 
 
             <form onSubmit={salvar}>
-
-
-
 
 
                 <div className="mb-3">
@@ -290,6 +330,8 @@ function NovoContrato() {
 
 
 
+
+
                 <div className="mb-3">
 
 
@@ -299,6 +341,7 @@ function NovoContrato() {
                         Imóvel
 
                     </label>
+
 
 
 
@@ -329,6 +372,7 @@ function NovoContrato() {
 
 
 
+
                         {imoveis.map(imovel => (
 
 
@@ -342,6 +386,10 @@ function NovoContrato() {
                             >
 
                                 {imovel.titulo}
+
+                                {" - "}
+
+                                {imovel.negocio}
 
                             </option>
 
@@ -362,6 +410,8 @@ function NovoContrato() {
 
 
 
+
+
                 <div className="mb-3">
 
 
@@ -374,39 +424,21 @@ function NovoContrato() {
 
 
 
-                    <select
 
-                        className="form-select"
+                    <input
 
-                        name="tipo"
+                        className="form-control"
 
                         value={form.tipo}
 
-                        onChange={alterarCampo}
+                        readOnly
 
-                    >
-
-
-                        <option value="VENDA">
-
-                            Venda
-
-                        </option>
-
-
-
-                        <option value="ALUGUEL">
-
-                            Aluguel
-
-                        </option>
-
-
-
-                    </select>
+                    />
 
 
                 </div>
+
+
 
 
 
@@ -422,6 +454,7 @@ function NovoContrato() {
                         Valor
 
                     </label>
+
 
 
 
@@ -451,6 +484,8 @@ function NovoContrato() {
 
 
 
+
+
                 <div className="mb-3">
 
 
@@ -459,6 +494,7 @@ function NovoContrato() {
                         Data início
 
                     </label>
+
 
 
 
@@ -486,6 +522,8 @@ function NovoContrato() {
 
 
 
+
+
                 <div className="mb-3">
 
 
@@ -494,6 +532,7 @@ function NovoContrato() {
                         Data fim
 
                     </label>
+
 
 
 
@@ -514,6 +553,8 @@ function NovoContrato() {
 
 
                 </div>
+
+
 
 
 

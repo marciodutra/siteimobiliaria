@@ -272,6 +272,7 @@ async function criar(req, res) {
 
 
 
+
         const contrato = await prisma.contrato.create({
 
             data: {
@@ -302,6 +303,29 @@ async function criar(req, res) {
             }
 
         });
+
+
+
+
+        await prisma.imovel.update({
+
+            where: {
+
+                id: Number(imovelId)
+
+            },
+
+            data: {
+
+                status:
+                    tipo === "VENDA"
+                        ? "VENDIDO"
+                        : "ALUGADO"
+
+            }
+
+        });
+
 
 
 

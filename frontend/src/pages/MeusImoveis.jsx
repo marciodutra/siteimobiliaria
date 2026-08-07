@@ -4,13 +4,14 @@ import { useAuth } from "../auth/AuthContext";
 import { Link } from "react-router-dom";
 
 
-
 function MeusImoveis() {
 
 
     const [imoveis, setImoveis] = useState([]);
 
     const { user } = useAuth();
+
+
 
     function urlImagem(caminho) {
 
@@ -34,20 +35,20 @@ function MeusImoveis() {
 
 
 
-    async function carregarImoveis() {
 
+    async function carregarImoveis() {
 
         try {
 
 
             const response = await api.get("/imoveis");
 
-            console.log(response.data);
-
 
             const meus = response.data.filter(
+
                 imovel =>
                     imovel.corretor?.userId === user.id
+
             );
 
 
@@ -57,14 +58,13 @@ function MeusImoveis() {
 
         } catch (error) {
 
-
             console.log(error);
-
 
         }
 
-
     }
+
+
 
 
 
@@ -81,32 +81,60 @@ function MeusImoveis() {
         try {
 
 
-            await api.delete(
-                `/imoveis/${id}`
-            );
+            await api.delete(`/imoveis/${id}`);
 
 
             carregarImoveis();
+
 
 
         } catch (error) {
 
 
             alert(
+
                 error.response?.data?.error ||
+
                 "Erro ao excluir"
+
             );
 
-
         }
-
 
     }
 
 
 
 
+
+    function textoStatus(status) {
+
+
+        if (status === "VENDIDO") {
+
+            return "Vendido";
+
+        }
+
+
+        if (status === "ALUGADO") {
+
+            return "Alugado";
+
+        }
+
+
+        return "Disponível";
+
+    }
+
+
+
+
+
+
     useEffect(() => {
+
 
         if (user) {
 
@@ -114,10 +142,16 @@ function MeusImoveis() {
 
         }
 
+
     }, [user]);
 
 
+
+
+
+
     return (
+
 
         <div className="container mt-5">
 
@@ -128,6 +162,8 @@ function MeusImoveis() {
 
 
 
+
+
             <div className="row">
 
 
@@ -135,30 +171,42 @@ function MeusImoveis() {
 
 
                     <div
+
                         className="col-md-4 mb-3"
+
                         key={imovel.id}
+
                     >
+
 
 
                         <div className="card">
 
 
-                            {
-                                imovel.imagens &&
-                                imovel.imagens.length > 0 && (
 
-                                    <img
-                                        src={urlImagem(imovel.imagens[0].caminho)}
-                                        className="card-img-top"
-                                        style={{
-                                            height: "220px",
-                                            objectFit: "cover"
-                                        }}
-                                        alt={imovel.titulo}
-                                    />
+                            <img
 
-                                )
-                            }
+                                src={
+                                    urlImagem(
+                                        imovel.imagens?.[0]?.caminho
+                                    )
+                                }
+
+                                className="card-img-top"
+
+                                style={{
+
+                                    height: "220px",
+
+                                    objectFit: "cover"
+
+                                }}
+
+                                alt={imovel.titulo}
+
+                            />
+
+
 
 
 
@@ -166,40 +214,84 @@ function MeusImoveis() {
 
 
                                 <h5>
+
                                     {imovel.titulo}
+
                                 </h5>
 
 
-                                <p>
+
+                                <span
+
+                                    className={
+                                        imovel.status === "DISPONIVEL"
+
+                                            ? "badge bg-success"
+
+                                            : "badge bg-danger"
+                                    }
+
+                                >
+
+                                    {textoStatus(imovel.status)}
+
+                                </span>
+
+
+
+
+
+                                <p className="mt-3">
+
                                     Código: {imovel.codigo}
+
                                 </p>
 
 
+
+
                                 <p>
+
                                     Cidade: {imovel.cidade}
+
                                 </p>
+
+
 
 
                                 <p>
+
                                     Valor:
-                                    R$ {imovel.valor}
+
+                                    R$ {Number(imovel.valor)
+                                        .toLocaleString("pt-BR")}
+
                                 </p>
+
+
+
+
 
 
                                 <div className="mt-3">
 
 
-                                    <Link
+                                    {imovel.status === "DISPONIVEL" && (
 
-                                        className="btn btn-primary me-2"
+                                        <Link
 
-                                        to={`/editar-imovel/${imovel.id}`}
+                                            className="btn btn-primary me-2"
 
-                                    >
+                                            to={`/editar-imovel/${imovel.id}`}
 
-                                        Editar
+                                        >
 
-                                    </Link>
+                                            Editar
+
+                                        </Link>
+
+                                    )}
+
 
 
 
@@ -221,10 +313,13 @@ function MeusImoveis() {
                                 </div>
 
 
+
                             </div>
 
 
+
                         </div>
+
 
 
                     </div>
@@ -235,6 +330,8 @@ function MeusImoveis() {
 
 
             </div>
+
+
 
 
 
@@ -251,6 +348,7 @@ function MeusImoveis() {
 
 
         </div>
+
 
     );
 

@@ -29,6 +29,7 @@ function Home() {
                 setImoveis(resposta.data);
 
 
+
             } catch (error) {
 
 
@@ -44,10 +45,13 @@ function Home() {
         }
 
 
+
         carregarImoveis();
 
 
+
     }, []);
+
 
 
 
@@ -61,6 +65,7 @@ function Home() {
             <BuscaImoveis />
 
 
+
             <div className="container my-5">
 
 
@@ -72,16 +77,23 @@ function Home() {
 
 
 
+
                 <div className="row g-4">
 
 
                     {
                         imoveis.map((imovel) => (
 
+
                             <div
+
                                 className="col-md-4"
+
                                 key={imovel.id}
+
                             >
+
+
 
                                 <CardImovel
 
@@ -100,7 +112,9 @@ function Home() {
 
                                 />
 
+
                             </div>
+
 
                         ))
                     }
@@ -110,7 +124,9 @@ function Home() {
                 </div>
 
 
+
             </div>
+
 
 
         </>
