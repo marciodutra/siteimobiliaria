@@ -165,6 +165,18 @@ function Contratos() {
 
                                 </p>
 
+                                <Link
+
+                                    className="btn btn-primary"
+
+                                    to={`/editar-contrato/${contrato.id}`}
+
+                                >
+
+                                    Editar
+
+                                </Link>
+
 
 
                             </div>

@@ -24,6 +24,8 @@ import ClienteDashboard from "./pages/ClienteDashboard";
 import Contratos from "./pages/Contratos";
 import NovoContrato from "./pages/NovoContrato";
 import ClienteImoveis from "./pages/ClienteImoveis";
+import ClienteContratos from "./pages/ClienteContratos";
+import EditarContrato from "./pages/EditarContrato";
 
 function App() {
 
@@ -213,6 +215,22 @@ function App() {
           path="/cliente/imoveis"
           element={
             <ClienteImoveis />
+          }
+        />
+
+        <Route
+          path="/cliente/contratos"
+          element={
+            <ClienteContratos />
+          }
+        />
+
+        <Route
+          path="/editar-contrato/:id"
+          element={
+            <LayoutSistema>
+              <EditarContrato />
+            </LayoutSistema>
           }
         />
 

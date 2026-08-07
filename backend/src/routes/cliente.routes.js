@@ -8,7 +8,8 @@ const auth = require("../middlewares/auth.middleware");
 
 const {
 
-    meusImoveis
+    meusImoveis,
+    meusContratos
 
 } = require("../controllers/cliente.controller");
 
@@ -21,6 +22,16 @@ router.get(
     auth,
 
     meusImoveis
+
+);
+
+router.get(
+
+    "/meus-contratos",
+
+    auth,
+
+    meusContratos
 
 );
 

@@ -731,7 +731,15 @@ function ClienteDashboard() {
 
                         <div className="col-md-4">
 
-                            <div className="card shadow-sm border-0 text-center">
+                            <div
+
+                                className="card shadow-sm border-0 text-center"
+
+                                style={{ cursor: "pointer" }}
+
+                                onClick={() => navigate("/cliente/contratos")}
+
+                            >
 
                                 <div className="card-body">
 
