@@ -41,16 +41,14 @@ function EditarContrato() {
                 valor: contrato.valor || "",
 
                 dataInicio: contrato.dataInicio
-                    ? contrato.dataInicio.substring(0,10)
+                    ? contrato.dataInicio.substring(0, 10)
                     : "",
 
                 dataFim: contrato.dataFim
-                    ? contrato.dataFim.substring(0,10)
+                    ? contrato.dataFim.substring(0, 10)
                     : "",
 
-                dataPagamento: contrato.dataPagamento
-                    ? contrato.dataPagamento.substring(0,10)
-                    : "",
+                dataPagamento: contrato.dataPagamento || "",
 
                 status: contrato.status || ""
 
@@ -58,7 +56,7 @@ function EditarContrato() {
 
 
 
-        } catch(error) {
+        } catch (error) {
 
             console.log(error);
 
@@ -117,7 +115,7 @@ function EditarContrato() {
 
 
 
-        } catch(error) {
+        } catch (error) {
 
 
             console.log(error);
@@ -265,7 +263,11 @@ function EditarContrato() {
 
                         className="form-control"
 
-                        type="date"
+                        type="number"
+
+                        min="1"
+
+                        max="31"
 
                         name="dataPagamento"
 

@@ -249,7 +249,7 @@ function ClienteContratos() {
                                                     new Date(
                                                         contrato.dataInicio
                                                     )
-                                                    .toLocaleDateString("pt-BR")
+                                                        .toLocaleDateString("pt-BR")
                                                 }
 
                                             </p>
@@ -259,32 +259,21 @@ function ClienteContratos() {
 
 
                                             {
-
                                                 contrato.dataPagamento && (
-
 
                                                     <p>
 
                                                         <strong>
-
-                                                            Pagamento aluguel:
-
+                                                            Dia pagamento aluguel:
                                                         </strong>
 
                                                         {" "}
 
-                                                        {
-                                                            new Date(
-                                                                contrato.dataPagamento
-                                                            )
-                                                            .toLocaleDateString("pt-BR")
-                                                        }
+                                                        Todo dia {contrato.dataPagamento}
 
                                                     </p>
 
-
                                                 )
-
                                             }
 
 
@@ -310,7 +299,7 @@ function ClienteContratos() {
                                                             new Date(
                                                                 contrato.dataFim
                                                             )
-                                                            .toLocaleDateString("pt-BR")
+                                                                .toLocaleDateString("pt-BR")
                                                         }
 
                                                     </p>

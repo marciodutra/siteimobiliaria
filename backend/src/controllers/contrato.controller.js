@@ -281,7 +281,7 @@ async function criar(req, res) {
                     : null,
 
                 dataPagamento: dataPagamento
-                    ? new Date(dataPagamento)
+                    ? Number(dataPagamento)
                     : null,
 
 
@@ -455,7 +455,7 @@ async function atualizar(req, res) {
                     : null,
 
                 dataPagamento: dataPagamento
-                    ? new Date(dataPagamento)
+                    ? Number(dataPagamento)
                     : null,
 
 
@@ -554,6 +554,8 @@ async function remover(req, res) {
 
 
 
+        // Exclui o contrato
+
         await prisma.contrato.delete({
 
             where: {
@@ -568,9 +570,32 @@ async function remover(req, res) {
 
 
 
+        // Libera novamente o imóvel
+
+        await prisma.imovel.update({
+
+            where: {
+
+                id: contrato.imovelId
+
+            },
+
+            data: {
+
+                status: "DISPONIVEL"
+
+            }
+
+        });
+
+
+
+
+
+
         res.json({
 
-            message: "Contrato removido com sucesso"
+            message: "Contrato removido e imóvel liberado com sucesso"
 
         });
 

@@ -511,7 +511,7 @@ function NovoContrato() {
 
                     <label className="form-label">
 
-                        Data pagamento aluguel
+                        Dia pagamento aluguel
 
                     </label>
 
@@ -520,7 +520,11 @@ function NovoContrato() {
 
                         className="form-control"
 
-                        type="date"
+                        type="number"
+
+                        min="1"
+
+                        max="31"
 
                         name="dataPagamento"
 

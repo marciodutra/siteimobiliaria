@@ -3,9 +3,7 @@ import api from "../api/api";
 import { useAuth } from "../auth/AuthContext";
 import { Link } from "react-router-dom";
 
-
 function Contratos() {
-
 
     const [contratos, setContratos] = useState([]);
 
@@ -15,14 +13,55 @@ function Contratos() {
 
     async function carregarContratos() {
 
+        try {
+
+            const response = await api.get("/contratos");
+
+            setContratos(response.data);
+
+
+        } catch (error) {
+
+            console.log(error);
+
+        }
+
+    }
+
+
+
+
+
+    async function excluirContrato(id) {
+
+
+        const confirmar = window.confirm(
+            "Deseja realmente excluir este contrato?"
+        );
+
+
+        if (!confirmar) {
+
+            return;
+
+        }
+
+
 
         try {
 
 
-            const response = await api.get("/contratos");
+            await api.delete(
+                `/contratos/${id}`
+            );
 
 
-            setContratos(response.data);
+            alert(
+                "Contrato excluído com sucesso"
+            );
+
+
+            carregarContratos();
 
 
 
@@ -30,6 +69,12 @@ function Contratos() {
 
 
             console.log(error);
+
+
+            alert(
+                error.response?.data?.error ||
+                "Erro ao excluir contrato"
+            );
 
 
         }
@@ -57,6 +102,7 @@ function Contratos() {
 
 
 
+
     return (
 
 
@@ -73,8 +119,11 @@ function Contratos() {
 
 
                 <Link
+
                     className="btn btn-success"
+
                     to="/novo-contrato"
+
                 >
 
                     Novo contrato
@@ -87,6 +136,7 @@ function Contratos() {
 
 
 
+
             <div className="row">
 
 
@@ -94,8 +144,11 @@ function Contratos() {
 
 
                     <div
+
                         className="col-md-6 mb-3"
+
                         key={contrato.id}
+
                     >
 
 
@@ -103,6 +156,7 @@ function Contratos() {
 
 
                             <div className="card-body">
+
 
 
                                 <h5>
@@ -113,16 +167,21 @@ function Contratos() {
 
 
 
+
                                 <p>
 
                                     Cliente:
+
                                     <br />
 
                                     <strong>
+
                                         {contrato.cliente?.user?.nome}
+
                                     </strong>
 
                                 </p>
+
 
 
 
@@ -130,12 +189,18 @@ function Contratos() {
                                 <p>
 
                                     Tipo:
+
                                     <strong>
+
                                         {" "}
+
                                         {contrato.tipo}
+
                                     </strong>
 
                                 </p>
+
+
 
 
 
@@ -144,12 +209,17 @@ function Contratos() {
                                     Valor:
 
                                     <strong>
+
                                         {" "}
+
                                         R$ {contrato.valor}
+
                                     </strong>
 
 
                                 </p>
+
+
 
 
 
@@ -165,17 +235,130 @@ function Contratos() {
 
                                 </p>
 
-                                <Link
 
-                                    className="btn btn-primary"
 
-                                    to={`/editar-contrato/${contrato.id}`}
 
-                                >
 
-                                    Editar
+                                <p>
 
-                                </Link>
+                                    Data início:
+
+                                    <strong>
+
+                                        {" "}
+
+                                        {
+                                            contrato.dataInicio &&
+                                            new Date(
+                                                contrato.dataInicio
+                                            )
+                                            .toLocaleDateString("pt-BR")
+                                        }
+
+                                    </strong>
+
+                                </p>
+
+
+
+
+
+                                {
+                                    contrato.dataPagamento && (
+
+
+                                        <p>
+
+                                            Dia pagamento aluguel:
+
+                                            <strong>
+
+                                                {" "}
+
+                                                Todo dia {contrato.dataPagamento}
+
+                                            </strong>
+
+
+                                        </p>
+
+
+                                    )
+                                }
+
+
+
+
+
+
+                                {
+                                    contrato.dataFim && (
+
+
+                                        <p>
+
+                                            Data fim:
+
+                                            <strong>
+
+                                                {" "}
+
+                                                {
+                                                    new Date(
+                                                        contrato.dataFim
+                                                    )
+                                                    .toLocaleDateString("pt-BR")
+                                                }
+
+                                            </strong>
+
+
+                                        </p>
+
+
+                                    )
+                                }
+
+
+
+
+
+
+
+                                <div className="mt-3">
+
+
+                                    <Link
+
+                                        className="btn btn-primary me-2"
+
+                                        to={`/editar-contrato/${contrato.id}`}
+
+                                    >
+
+                                        Editar
+
+                                    </Link>
+
+
+
+
+
+                                    <button
+
+                                        className="btn btn-danger"
+
+                                        onClick={() => excluirContrato(contrato.id)}
+
+                                    >
+
+                                        Excluir
+
+                                    </button>
+
+
+
+                                </div>
 
 
 
@@ -197,7 +380,9 @@ function Contratos() {
 
 
 
+
             {contratos.length === 0 && (
+
 
                 <div className="alert alert-info">
 
@@ -205,7 +390,9 @@ function Contratos() {
 
                 </div>
 
+
             )}
+
 
 
 
@@ -214,8 +401,6 @@ function Contratos() {
 
     );
 
-
 }
-
 
 export default Contratos;
