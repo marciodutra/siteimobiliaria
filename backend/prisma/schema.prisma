@@ -27,35 +27,39 @@ model Corretor {
   creci     String   @unique
   userId    Int      @unique
   createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+
+  user      User       @relation(fields: [userId], references: [id])
   imoveis   Imovel[]
   contratos Contrato[]
 }
 
 model Imovel {
-  id         Int          @id @default(autoincrement())
-  codigo     String       @unique
-  titulo     String
-  descricao  String
-  tipo       String
-  negocio    TipoNegocio
-  valor      Decimal      @db.Decimal(12, 2)
-  cidade     String
-  bairro     String
-  endereco   String
-  quartos    Int
-  banheiros  Int
-  suites     Int
-  vagas      Int
-  area       Float
-  destaque   Boolean      @default(false)
-  status     StatusImovel @default(DISPONIVEL)
+  id        Int          @id @default(autoincrement())
+  codigo    String       @unique
+  titulo    String
+  descricao String
+  tipo      String
+  negocio   TipoNegocio
+  valor     Decimal      @db.Decimal(12, 2)
+  cidade    String
+  bairro    String
+  endereco  String
+  quartos   Int
+  banheiros Int
+  suites    Int
+  vagas     Int
+  area      Float
+  destaque  Boolean      @default(false)
+  status    StatusImovel @default(DISPONIVEL)
+
   corretorId Int
-  createdAt  DateTime     @default(now())
-  updatedAt  DateTime     @updatedAt
-  imagens    Imagem[]
-  corretor   Corretor     @relation(fields: [corretorId], references: [id])
-  mensagens  Mensagem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  imagens   Imagem[]
+  corretor  Corretor   @relation(fields: [corretorId], references: [id])
+  mensagens Mensagem[]
   contratos Contrato[]
 }
 
@@ -63,8 +67,10 @@ model Imagem {
   id        Int     @id @default(autoincrement())
   caminho   String
   principal Boolean @default(false)
-  imovelId  Int
-  imovel    Imovel  @relation(fields: [imovelId], references: [id], onDelete: Cascade)
+
+  imovelId Int
+
+  imovel Imovel @relation(fields: [imovelId], references: [id], onDelete: Cascade)
 }
 
 model Mensagem {
@@ -74,8 +80,88 @@ model Mensagem {
   telefone  String?
   mensagem  String
   createdAt DateTime @default(now())
-  imovelId  Int
-  imovel    Imovel   @relation(fields: [imovelId], references: [id], onDelete: Cascade)
+
+  imovelId Int
+
+  imovel Imovel @relation(fields: [imovelId], references: [id], onDelete: Cascade)
+}
+
+model Cliente {
+  id Int @id @default(autoincrement())
+
+  telefone String?
+  cpf      String?
+  rg       String?
+
+  dataNascimento DateTime?
+
+  endereco    String?
+  numero      String?
+  complemento String?
+  bairro      String?
+  cidade      String?
+  estado      String?
+  cep         String?
+
+  userId Int @unique
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  contratos Contrato[]
+}
+
+model Contrato {
+  id Int @id @default(autoincrement())
+
+  tipo TipoNegocio
+
+  valor Decimal @db.Decimal(12, 2)
+
+  dataInicio DateTime @default(now())
+
+  dataFim DateTime?
+
+  dataPagamento Int?
+
+  status StatusContrato @default(ATIVO)
+
+  clienteId Int
+
+  cliente Cliente @relation(fields: [clienteId], references: [id])
+
+  imovelId Int
+
+  imovel Imovel @relation(fields: [imovelId], references: [id])
+
+  corretorId Int
+
+  corretor Corretor @relation(fields: [corretorId], references: [id])
+
+  boletos Boleto[]
+
+  createdAt DateTime @default(now())
+}
+
+model Boleto {
+  id Int @id @default(autoincrement())
+
+  numero Int
+
+  vencimento DateTime
+
+  valor Decimal @db.Decimal(12, 2)
+
+  status StatusBoleto @default(PENDENTE)
+
+  dataPagamento DateTime?
+
+  contratoId Int
+
+  contrato Contrato @relation(fields: [contratoId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
 }
 
 enum TipoUsuario {
@@ -96,76 +182,13 @@ enum StatusImovel {
   INATIVO
 }
 
-model Cliente {
-
-  id Int @id @default(autoincrement())
-
-  telefone String?
-  cpf String?
-  rg String?
-
-  dataNascimento DateTime?
-
-  endereco String?
-  numero String?
-  complemento String?
-  bairro String?
-  cidade String?
-  estado String?
-  cep String?
-
-  userId Int @unique
-
-  createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  contratos Contrato[]
-
-}
-
-model Contrato {
-
-  id Int @id @default(autoincrement())
-
-  tipo TipoNegocio
-
-  valor Decimal @db.Decimal(12,2)
-
-  dataInicio DateTime @default(now())
-
-  dataFim DateTime?
-
-  dataPagamento Int?
-
-  status StatusContrato @default(ATIVO)
-
-
-  clienteId Int
-
-  cliente Cliente @relation(fields: [clienteId], references: [id])
-
-
-  imovelId Int
-
-  imovel Imovel @relation(fields: [imovelId], references: [id])
-
-
-  corretorId Int
-
-  corretor Corretor @relation(fields: [corretorId], references: [id])
-
-
-  createdAt DateTime @default(now())
-
-}
-
 enum StatusContrato {
-
   ATIVO
-
   ENCERRADO
-
   PENDENTE
+}
 
+enum StatusBoleto {
+  PENDENTE
+  PAGO
 }

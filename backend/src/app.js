@@ -11,6 +11,7 @@ const mensagemRoutes = require("./routes/mensagem.routes");
 const usuarioRoutes = require("./routes/usuario.routes");
 const contratoRoutes = require("./routes/contrato.routes");
 const clienteRoutes = require("./routes/cliente.routes");
+const boletoRoutes = require("./routes/boleto.routes");
 
 app.use(cors());
 app.use(express.json());
@@ -24,6 +25,8 @@ app.use("/api/mensagens", mensagemRoutes);
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/contratos", contratoRoutes);
 app.use("/api/clientes", clienteRoutes);
+app.use("/api/boletos", boletoRoutes);
+
 
 app.get("/", (req, res) => {
     res.json({

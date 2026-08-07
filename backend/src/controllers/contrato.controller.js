@@ -12,12 +12,8 @@ async function buscarCorretorLogado(req) {
 
     });
 
-
     return corretor;
-
 }
-
-
 
 
 
@@ -25,9 +21,7 @@ async function listar(req, res) {
 
     try {
 
-
         const corretor = await buscarCorretorLogado(req);
-
 
         if (!corretor) {
 
@@ -42,11 +36,8 @@ async function listar(req, res) {
         const contratos = await prisma.contrato.findMany({
 
             where: {
-
                 corretorId: corretor.id
-
             },
-
 
             include: {
 
@@ -70,8 +61,9 @@ async function listar(req, res) {
 
                 },
 
+                imovel: true,
 
-                imovel: true
+                boletos: true
 
             }
 
@@ -85,13 +77,9 @@ async function listar(req, res) {
 
     } catch (error) {
 
-
         res.status(500).json({
-
             error: error.message
-
         });
-
 
     }
 
@@ -99,20 +87,13 @@ async function listar(req, res) {
 
 
 
-
-
-
-
 async function buscarPorId(req, res) {
 
     try {
 
-
         const { id } = req.params;
 
-
         const corretor = await buscarCorretorLogado(req);
-
 
         if (!corretor) {
 
@@ -134,31 +115,21 @@ async function buscarPorId(req, res) {
 
             },
 
-
             include: {
 
                 cliente: {
 
                     include: {
 
-                        user: {
-
-                            select: {
-
-                                id: true,
-                                nome: true,
-                                email: true
-
-                            }
-
-                        }
+                        user: true
 
                     }
 
                 },
 
+                imovel: true,
 
-                imovel: true
+                boletos: true
 
             }
 
@@ -169,9 +140,7 @@ async function buscarPorId(req, res) {
         if (!contrato) {
 
             return res.status(404).json({
-
                 error: "Contrato não encontrado"
-
             });
 
         }
@@ -184,13 +153,9 @@ async function buscarPorId(req, res) {
 
     } catch (error) {
 
-
         res.status(500).json({
-
             error: error.message
-
         });
-
 
     }
 
@@ -198,24 +163,16 @@ async function buscarPorId(req, res) {
 
 
 
-
-
-
-
 async function criar(req, res) {
 
     try {
 
-
         const corretor = await buscarCorretorLogado(req);
-
 
         if (!corretor) {
 
             return res.status(404).json({
-
                 error: "Corretor não encontrado"
-
             });
 
         }
@@ -223,6 +180,7 @@ async function criar(req, res) {
 
 
         const {
+
             tipo,
             valor,
             dataInicio,
@@ -230,8 +188,14 @@ async function criar(req, res) {
             dataPagamento,
             status,
             clienteId,
-            imovelId
+            imovelId,
+
+            formaPagamento,
+            quantidadeParcelas,
+            dataPrimeiroVencimento
+
         } = req.body;
+
 
 
         const imovel = await prisma.imovel.findFirst({
@@ -251,15 +215,30 @@ async function criar(req, res) {
         if (!imovel) {
 
             return res.status(403).json({
-
                 error: "Este imóvel não pertence ao corretor"
-
             });
 
         }
 
 
 
+        const cliente = await prisma.cliente.findUnique({
+
+            where: {
+                id: Number(clienteId)
+            }
+
+        });
+
+
+
+        if (!cliente) {
+
+            return res.status(404).json({
+                error: "Cliente não encontrado"
+            });
+
+        }
 
 
 
@@ -275,7 +254,6 @@ async function criar(req, res) {
                     ? new Date(dataInicio)
                     : undefined,
 
-
                 dataFim: dataFim
                     ? new Date(dataFim)
                     : null,
@@ -284,9 +262,7 @@ async function criar(req, res) {
                     ? Number(dataPagamento)
                     : null,
 
-
-                status,
-
+                status: status || "ATIVO",
 
                 clienteId: Number(clienteId),
 
@@ -300,6 +276,222 @@ async function criar(req, res) {
 
 
 
+        /*
+         * =========================================================
+         * ALUGUEL
+         * =========================================================
+         *
+         * Mantém a lógica que já estava funcionando.
+         */
+
+        if (
+
+            tipo === "ALUGUEL" &&
+
+            dataInicio &&
+
+            dataFim &&
+
+            dataPagamento
+
+        ) {
+
+            const boletos = [];
+
+            let numero = 1;
+
+            let data = new Date(dataInicio);
+
+
+
+            while (data <= new Date(dataFim)) {
+
+                const vencimento = new Date(
+
+                    data.getFullYear(),
+
+                    data.getMonth(),
+
+                    Number(dataPagamento)
+
+                );
+
+
+
+                if (
+
+                    vencimento >= new Date(dataInicio) &&
+
+                    vencimento <= new Date(dataFim)
+
+                ) {
+
+                    boletos.push({
+
+                        numero,
+
+                        vencimento,
+
+                        valor,
+
+                        contratoId: contrato.id
+
+                    });
+
+                    numero++;
+
+                }
+
+
+
+                data.setMonth(data.getMonth() + 1);
+
+            }
+
+
+
+            if (boletos.length > 0) {
+
+                await prisma.boleto.createMany({
+
+                    data: boletos
+
+                });
+
+            }
+
+        }
+
+
+
+        /*
+         * =========================================================
+         * VENDA PARCELADA
+         * =========================================================
+         */
+
+        if (
+
+            tipo === "VENDA" &&
+
+            formaPagamento === "PARCELADO"
+
+        ) {
+
+            const quantidade = Number(quantidadeParcelas);
+
+
+
+            if (
+
+                !quantidade ||
+
+                quantidade < 2
+
+            ) {
+
+                return res.status(400).json({
+
+                    error: "Informe uma quantidade válida de parcelas"
+
+                });
+
+            }
+
+
+
+            if (!dataPrimeiroVencimento) {
+
+                return res.status(400).json({
+
+                    error: "Informe a data do primeiro vencimento"
+
+                });
+
+            }
+
+
+
+            const valorTotal = Number(valor);
+
+            const valorParcela = valorTotal / quantidade;
+
+            const boletos = [];
+
+
+
+            const primeiraData = new Date(
+
+                `${dataPrimeiroVencimento}T12:00:00`
+
+            );
+
+
+
+            for (let i = 0; i < quantidade; i++) {
+
+                const vencimento = new Date(primeiraData);
+
+                vencimento.setMonth(
+
+                    vencimento.getMonth() + i
+
+                );
+
+
+
+                let valorAtual = valorParcela;
+
+
+
+                /*
+                 * Ajusta a última parcela para evitar
+                 * diferença de centavos.
+                 */
+
+                if (i === quantidade - 1) {
+
+                    valorAtual =
+
+                        valorTotal -
+
+                        valorParcela * (quantidade - 1);
+
+                }
+
+
+
+                boletos.push({
+
+                    numero: i + 1,
+
+                    vencimento,
+
+                    valor: valorAtual,
+
+                    contratoId: contrato.id
+
+                });
+
+            }
+
+
+
+            await prisma.boleto.createMany({
+
+                data: boletos
+
+            });
+
+        }
+
+
+
+        /*
+         * =========================================================
+         * ATUALIZA STATUS DO IMÓVEL
+         * =========================================================
+         */
 
         await prisma.imovel.update({
 
@@ -312,8 +504,11 @@ async function criar(req, res) {
             data: {
 
                 status:
+
                     tipo === "VENDA"
+
                         ? "VENDIDO"
+
                         : "ALUGADO"
 
             }
@@ -322,12 +517,51 @@ async function criar(req, res) {
 
 
 
+        const contratoCompleto = await prisma.contrato.findUnique({
+
+            where: {
+
+                id: contrato.id
+
+            },
+
+            include: {
+
+                cliente: {
+
+                    include: {
+
+                        user: {
+
+                            select: {
+
+                                id: true,
+                                nome: true,
+                                email: true
+
+                            }
+
+                        }
+
+                    }
+
+                },
+
+                imovel: true,
+
+                boletos: true
+
+            }
+
+        });
+
+
 
         res.status(201).json({
 
             message: "Contrato criado com sucesso",
 
-            contrato
+            contrato: contratoCompleto
 
         });
 
@@ -335,6 +569,7 @@ async function criar(req, res) {
 
     } catch (error) {
 
+        console.log(error);
 
         res.status(500).json({
 
@@ -342,14 +577,9 @@ async function criar(req, res) {
 
         });
 
-
     }
 
 }
-
-
-
-
 
 
 
@@ -357,9 +587,7 @@ async function atualizar(req, res) {
 
     try {
 
-
         const { id } = req.params;
-
 
         const corretor = await buscarCorretorLogado(req);
 
@@ -374,8 +602,6 @@ async function atualizar(req, res) {
             });
 
         }
-
-
 
 
 
@@ -427,8 +653,6 @@ async function atualizar(req, res) {
 
 
 
-
-
         const atualizado = await prisma.contrato.update({
 
             where: {
@@ -437,38 +661,42 @@ async function atualizar(req, res) {
 
             },
 
-
             data: {
 
                 tipo,
 
                 valor,
 
-
                 dataInicio: dataInicio
+
                     ? new Date(dataInicio)
+
                     : undefined,
 
-
                 dataFim: dataFim
+
                     ? new Date(dataFim)
+
                     : null,
 
                 dataPagamento: dataPagamento
-                    ? Number(dataPagamento)
-                    : null,
 
+                    ? Number(dataPagamento)
+
+                    : null,
 
                 status,
 
-
                 clienteId: clienteId
+
                     ? Number(clienteId)
+
                     : undefined,
 
-
                 imovelId: imovelId
+
                     ? Number(imovelId)
+
                     : undefined
 
             }
@@ -483,13 +711,11 @@ async function atualizar(req, res) {
 
     } catch (error) {
 
-
         res.status(500).json({
 
             error: error.message
 
         });
-
 
     }
 
@@ -497,17 +723,11 @@ async function atualizar(req, res) {
 
 
 
-
-
-
-
 async function remover(req, res) {
 
     try {
 
-
         const { id } = req.params;
-
 
         const corretor = await buscarCorretorLogado(req);
 
@@ -522,7 +742,6 @@ async function remover(req, res) {
             });
 
         }
-
 
 
 
@@ -552,10 +771,6 @@ async function remover(req, res) {
 
 
 
-
-
-        // Exclui o contrato
-
         await prisma.contrato.delete({
 
             where: {
@@ -567,10 +782,6 @@ async function remover(req, res) {
         });
 
 
-
-
-
-        // Libera novamente o imóvel
 
         await prisma.imovel.update({
 
@@ -590,9 +801,6 @@ async function remover(req, res) {
 
 
 
-
-
-
         res.json({
 
             message: "Contrato removido e imóvel liberado com sucesso"
@@ -603,17 +811,16 @@ async function remover(req, res) {
 
     } catch (error) {
 
-
         res.status(500).json({
 
             error: error.message
 
         });
 
-
     }
 
 }
+
 
 
 module.exports = {

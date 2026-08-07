@@ -3,9 +3,7 @@ import api from "../api/api";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 
-
 function NovoContrato() {
-
 
     const navigate = useNavigate();
 
@@ -14,8 +12,6 @@ function NovoContrato() {
     const [clientes, setClientes] = useState([]);
 
     const [imoveis, setImoveis] = useState([]);
-
-
 
     const [form, setForm] = useState({
 
@@ -26,7 +22,11 @@ function NovoContrato() {
         dataPagamento: "",
         status: "ATIVO",
         clienteId: "",
-        imovelId: ""
+        imovelId: "",
+
+        formaPagamento: "A_VISTA",
+        quantidadeParcelas: "",
+        dataPrimeiroVencimento: ""
 
     });
 
@@ -34,13 +34,9 @@ function NovoContrato() {
 
     async function carregarDados() {
 
-
         try {
 
-
             const usuarios = await api.get("/usuarios");
-
-
 
             const listaClientes = usuarios.data.filter(
 
@@ -50,18 +46,11 @@ function NovoContrato() {
 
             );
 
-
             setClientes(listaClientes);
 
 
 
-
-
-
-
             const respostaImoveis = await api.get("/imoveis");
-
-
 
             const disponiveis = respostaImoveis.data.filter(
 
@@ -71,42 +60,25 @@ function NovoContrato() {
 
             );
 
-
-
             setImoveis(disponiveis);
-
-
 
         } catch (error) {
 
-
             console.log(error);
 
-
         }
-
 
     }
 
 
 
-
-
-
-
-
     function alterarCampo(e) {
-
 
         const { name, value } = e.target;
 
 
 
-
-
         if (name === "imovelId") {
-
-
 
             const imovelSelecionado = imoveis.find(
 
@@ -114,8 +86,6 @@ function NovoContrato() {
                     imovel.id === Number(value)
 
             );
-
-
 
 
 
@@ -129,22 +99,20 @@ function NovoContrato() {
                     ? imovelSelecionado.valor
                     : "",
 
-
                 tipo: imovelSelecionado
                     ? imovelSelecionado.negocio
-                    : ""
+                    : "",
+
+                formaPagamento:
+                    imovelSelecionado?.negocio === "VENDA"
+                        ? "A_VISTA"
+                        : "A_VISTA"
 
             });
 
-
-
             return;
 
-
         }
-
-
-
 
 
 
@@ -156,20 +124,11 @@ function NovoContrato() {
 
         });
 
-
-
     }
 
 
 
-
-
-
-
-
-
     async function salvar(e) {
-
 
         e.preventDefault();
 
@@ -177,13 +136,53 @@ function NovoContrato() {
 
         try {
 
+            const dados = {
+
+                tipo: form.tipo,
+
+                valor: form.valor,
+
+                dataInicio: form.dataInicio || null,
+
+                dataFim: form.dataFim || null,
+
+                dataPagamento:
+                    form.tipo === "ALUGUEL"
+                        ? form.dataPagamento || null
+                        : null,
+
+                status: form.status,
+
+                clienteId: form.clienteId,
+
+                imovelId: form.imovelId,
+
+                formaPagamento:
+                    form.tipo === "VENDA"
+                        ? form.formaPagamento
+                        : null,
+
+                quantidadeParcelas:
+                    form.tipo === "VENDA" &&
+                    form.formaPagamento === "PARCELADO"
+                        ? Number(form.quantidadeParcelas)
+                        : null,
+
+                dataPrimeiroVencimento:
+                    form.tipo === "VENDA" &&
+                    form.formaPagamento === "PARCELADO"
+                        ? form.dataPrimeiroVencimento
+                        : null
+
+            };
+
 
 
             await api.post(
 
                 "/contratos",
 
-                form
+                dados
 
             );
 
@@ -191,15 +190,13 @@ function NovoContrato() {
 
             alert("Contrato criado com sucesso");
 
-
-
             navigate("/contratos");
 
 
 
         } catch (error) {
 
-
+            console.log(error);
 
             alert(
 
@@ -209,11 +206,10 @@ function NovoContrato() {
 
             );
 
-
         }
 
-
     }
+
 
 
     useEffect(() => {
@@ -228,20 +224,11 @@ function NovoContrato() {
 
 
 
-
-
-
-
-
-
     return (
 
+        <div className="container mt-5 mb-5">
 
-
-        <div className="container mt-5">
-
-
-            <h2>
+            <h2 className="mb-4">
 
                 Novo Contrato
 
@@ -249,13 +236,11 @@ function NovoContrato() {
 
 
 
-
-
             <form onSubmit={salvar}>
 
 
-                <div className="mb-3">
 
+                <div className="mb-3">
 
                     <label className="form-label">
 
@@ -279,7 +264,6 @@ function NovoContrato() {
 
                     >
 
-
                         <option value="">
 
                             Selecione
@@ -288,9 +272,7 @@ function NovoContrato() {
 
 
 
-
                         {clientes.map(cliente => (
-
 
                             <option
 
@@ -304,36 +286,21 @@ function NovoContrato() {
 
                             </option>
 
-
-
                         ))}
 
-
-
                     </select>
-
 
                 </div>
 
 
 
-
-
-
-
-
-
                 <div className="mb-3">
-
-
 
                     <label className="form-label">
 
                         Imóvel
 
                     </label>
-
-
 
 
 
@@ -351,8 +318,6 @@ function NovoContrato() {
 
                     >
 
-
-
                         <option value="">
 
                             Selecione
@@ -361,12 +326,7 @@ function NovoContrato() {
 
 
 
-
-
-
                         {imoveis.map(imovel => (
-
-
 
                             <option
 
@@ -384,35 +344,21 @@ function NovoContrato() {
 
                             </option>
 
-
-
                         ))}
 
-
-
                     </select>
-
 
                 </div>
 
 
 
-
-
-
-
-
-
                 <div className="mb-3">
-
 
                     <label className="form-label">
 
                         Tipo
 
                     </label>
-
-
 
 
 
@@ -426,19 +372,11 @@ function NovoContrato() {
 
                     />
 
-
                 </div>
 
 
 
-
-
-
-
-
-
                 <div className="mb-3">
-
 
                     <label className="form-label">
 
@@ -448,13 +386,13 @@ function NovoContrato() {
 
 
 
-
-
                     <input
 
                         className="form-control"
 
                         type="number"
+
+                        step="0.01"
 
                         name="valor"
 
@@ -466,113 +404,225 @@ function NovoContrato() {
 
                     />
 
-
                 </div>
 
 
 
+                {form.tipo === "VENDA" && (
 
+                    <>
 
+                        <div className="mb-3">
 
+                            <label className="form-label">
 
+                                Forma de pagamento
 
+                            </label>
 
-                <div className="mb-3">
 
 
-                    <label className="form-label">
+                            <select
 
-                        Data início
+                                className="form-select"
 
-                    </label>
+                                name="formaPagamento"
 
+                                value={form.formaPagamento}
 
+                                onChange={alterarCampo}
 
+                                required
 
+                            >
 
-                    <input
+                                <option value="A_VISTA">
 
-                        className="form-control"
+                                    À vista
 
-                        type="date"
+                                </option>
 
-                        name="dataInicio"
 
-                        value={form.dataInicio}
 
-                        onChange={alterarCampo}
+                                <option value="PARCELADO">
 
-                    />
+                                    Parcelado
 
+                                </option>
 
-                </div>
+                            </select>
 
-                <div className="mb-3">
+                        </div>
 
-                    <label className="form-label">
 
-                        Dia pagamento aluguel
 
-                    </label>
+                        {form.formaPagamento === "PARCELADO" && (
 
+                            <>
 
-                    <input
+                                <div className="mb-3">
 
-                        className="form-control"
+                                    <label className="form-label">
 
-                        type="number"
+                                        Quantidade de parcelas
 
-                        min="1"
+                                    </label>
 
-                        max="31"
 
-                        name="dataPagamento"
 
-                        value={form.dataPagamento}
+                                    <input
 
-                        onChange={alterarCampo}
+                                        className="form-control"
 
-                    />
+                                        type="number"
 
-                </div>
+                                        min="2"
 
+                                        name="quantidadeParcelas"
 
+                                        value={form.quantidadeParcelas}
 
-                <div className="mb-3">
+                                        onChange={alterarCampo}
 
+                                        required
 
-                    <label className="form-label">
+                                    />
 
-                        Data fim
+                                </div>
 
-                    </label>
 
 
+                                <div className="mb-3">
 
+                                    <label className="form-label">
 
+                                        Primeiro vencimento
 
-                    <input
+                                    </label>
 
-                        className="form-control"
 
-                        type="date"
 
-                        name="dataFim"
+                                    <input
 
-                        value={form.dataFim}
+                                        className="form-control"
 
-                        onChange={alterarCampo}
+                                        type="date"
 
-                    />
+                                        name="dataPrimeiroVencimento"
 
+                                        value={form.dataPrimeiroVencimento}
 
-                </div>
+                                        onChange={alterarCampo}
 
+                                        required
 
+                                    />
 
+                                </div>
 
+                            </>
 
+                        )}
 
+                    </>
+
+                )}
+
+
+
+                {form.tipo === "ALUGUEL" && (
+
+                    <>
+
+                        <div className="mb-3">
+
+                            <label className="form-label">
+
+                                Data início
+
+                            </label>
+
+
+
+                            <input
+
+                                className="form-control"
+
+                                type="date"
+
+                                name="dataInicio"
+
+                                value={form.dataInicio}
+
+                                onChange={alterarCampo}
+
+                            />
+
+                        </div>
+
+
+
+                        <div className="mb-3">
+
+                            <label className="form-label">
+
+                                Dia pagamento aluguel
+
+                            </label>
+
+
+
+                            <input
+
+                                className="form-control"
+
+                                type="number"
+
+                                min="1"
+
+                                max="31"
+
+                                name="dataPagamento"
+
+                                value={form.dataPagamento}
+
+                                onChange={alterarCampo}
+
+                            />
+
+                        </div>
+
+
+
+                        <div className="mb-3">
+
+                            <label className="form-label">
+
+                                Data fim
+
+                            </label>
+
+
+
+                            <input
+
+                                className="form-control"
+
+                                type="date"
+
+                                name="dataFim"
+
+                                value={form.dataFim}
+
+                                onChange={alterarCampo}
+
+                            />
+
+                        </div>
+
+                    </>
+
+                )}
 
 
 
@@ -590,18 +640,28 @@ function NovoContrato() {
 
 
 
+                <button
+
+                    type="button"
+
+                    className="btn btn-secondary ms-2"
+
+                    onClick={() => navigate("/contratos")}
+
+                >
+
+                    Cancelar
+
+                </button>
+
 
 
             </form>
 
-
         </div>
-
 
     );
 
-
 }
-
 
 export default NovoContrato;
