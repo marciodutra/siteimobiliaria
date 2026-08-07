@@ -136,6 +136,8 @@ model Contrato {
 
   dataFim DateTime?
 
+  dataPagamento DateTime?
+
   status StatusContrato @default(ATIVO)
 
 

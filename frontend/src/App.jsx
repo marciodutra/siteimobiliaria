@@ -23,6 +23,7 @@ import ClienteCadastro from "./pages/ClienteCadastro";
 import ClienteDashboard from "./pages/ClienteDashboard";
 import Contratos from "./pages/Contratos";
 import NovoContrato from "./pages/NovoContrato";
+import ClienteImoveis from "./pages/ClienteImoveis";
 
 function App() {
 
@@ -205,6 +206,13 @@ function App() {
             <LayoutSistema>
               <NovoContrato />
             </LayoutSistema>
+          }
+        />
+
+        <Route
+          path="/cliente/imoveis"
+          element={
+            <ClienteImoveis />
           }
         />
 

@@ -31,7 +31,7 @@ function ClienteDashboard() {
 
         dataNascimento: user?.cliente?.dataNascimento
             ?
-            user.cliente.dataNascimento.substring(0,10)
+            user.cliente.dataNascimento.substring(0, 10)
             :
             "",
 
@@ -169,7 +169,7 @@ function ClienteDashboard() {
 
 
 
-        } catch(error) {
+        } catch (error) {
 
 
             console.log(error);
@@ -226,11 +226,11 @@ function ClienteDashboard() {
 
                                         style={{
 
-                                            width:"130px",
+                                            width: "130px",
 
-                                            height:"130px",
+                                            height: "130px",
 
-                                            objectFit:"cover"
+                                            objectFit: "cover"
 
                                         }}
 
@@ -244,11 +244,11 @@ function ClienteDashboard() {
 
                                         style={{
 
-                                            width:"130px",
+                                            width: "130px",
 
-                                            height:"130px",
+                                            height: "130px",
 
-                                            fontSize:"55px"
+                                            fontSize: "55px"
 
                                         }}
 
@@ -411,66 +411,66 @@ function ClienteDashboard() {
 
                                             {
                                                 Object.keys(dados)
-                                                .filter(
-                                                    campo =>
-                                                    campo !== "nome" &&
-                                                    campo !== "email"
-                                                )
-                                                .map((campo)=>(
+                                                    .filter(
+                                                        campo =>
+                                                            campo !== "nome" &&
+                                                            campo !== "email"
+                                                    )
+                                                    .map((campo) => (
 
 
-                                                    <div
+                                                        <div
 
-                                                        className="col-md-6 mb-3"
+                                                            className="col-md-6 mb-3"
 
-                                                        key={campo}
+                                                            key={campo}
 
-                                                    >
-
-
-                                                        <label className="fw-bold">
-
-                                                            {
-                                                                campo
-                                                                    .replace(
-                                                                        /([A-Z])/g,
-                                                                        " $1"
-                                                                    )
-                                                                    .replace(
-                                                                        /^./,
-                                                                        letra =>
-                                                                        letra.toUpperCase()
-                                                                    )
-                                                            }
-
-                                                        </label>
+                                                        >
 
 
-                                                        <input
+                                                            <label className="fw-bold">
 
-                                                            className="form-control"
+                                                                {
+                                                                    campo
+                                                                        .replace(
+                                                                            /([A-Z])/g,
+                                                                            " $1"
+                                                                        )
+                                                                        .replace(
+                                                                            /^./,
+                                                                            letra =>
+                                                                                letra.toUpperCase()
+                                                                        )
+                                                                }
 
-                                                            type={
-                                                                campo === "dataNascimento"
-                                                                ?
-                                                                "date"
-                                                                :
-                                                                "text"
-                                                            }
-
-                                                            name={campo}
-
-                                                            value={dados[campo]}
-
-                                                            onChange={alterar}
-
-                                                        />
+                                                            </label>
 
 
-                                                    </div>
+                                                            <input
+
+                                                                className="form-control"
+
+                                                                type={
+                                                                    campo === "dataNascimento"
+                                                                        ?
+                                                                        "date"
+                                                                        :
+                                                                        "text"
+                                                                }
+
+                                                                name={campo}
+
+                                                                value={dados[campo]}
+
+                                                                onChange={alterar}
+
+                                                            />
 
 
-                                                ))
+                                                        </div>
+
+
+                                                    ))
                                             }
 
 
@@ -602,13 +602,13 @@ function ClienteDashboard() {
 
                                     {
                                         user?.cliente?.dataNascimento
-                                        ?
-                                        new Date(
-                                            user.cliente.dataNascimento
-                                        )
-                                        .toLocaleDateString("pt-BR")
-                                        :
-                                        "-"
+                                            ?
+                                            new Date(
+                                                user.cliente.dataNascimento
+                                            )
+                                                .toLocaleDateString("pt-BR")
+                                            :
+                                            "-"
                                     }
 
                                 </div>
@@ -700,7 +700,15 @@ function ClienteDashboard() {
 
                         <div className="col-md-4">
 
-                            <div className="card shadow-sm border-0 text-center">
+                            <div
+
+                                className="card shadow-sm border-0 text-center"
+
+                                style={{ cursor: "pointer" }}
+
+                                onClick={() => navigate("/cliente/imoveis")}
+
+                            >
 
                                 <div className="card-body">
 

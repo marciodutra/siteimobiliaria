@@ -23,14 +23,12 @@ function NovoContrato() {
         valor: "",
         dataInicio: "",
         dataFim: "",
+        dataPagamento: "",
         status: "ATIVO",
         clienteId: "",
         imovelId: ""
 
     });
-
-
-
 
 
 
@@ -216,13 +214,6 @@ function NovoContrato() {
 
 
     }
-
-
-
-
-
-
-
 
 
     useEffect(() => {
@@ -516,11 +507,30 @@ function NovoContrato() {
 
                 </div>
 
+                <div className="mb-3">
+
+                    <label className="form-label">
+
+                        Data pagamento aluguel
+
+                    </label>
 
 
+                    <input
 
+                        className="form-control"
 
+                        type="date"
 
+                        name="dataPagamento"
+
+                        value={form.dataPagamento}
+
+                        onChange={alterarCampo}
+
+                    />
+
+                </div>
 
 
 

@@ -10,6 +10,7 @@ const imagemRoutes = require("./routes/imagem.routes");
 const mensagemRoutes = require("./routes/mensagem.routes");
 const usuarioRoutes = require("./routes/usuario.routes");
 const contratoRoutes = require("./routes/contrato.routes");
+const clienteRoutes = require("./routes/cliente.routes");
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +23,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/api/mensagens", mensagemRoutes);
 app.use("/api/usuarios", usuarioRoutes);
 app.use("/api/contratos", contratoRoutes);
+app.use("/api/clientes", clienteRoutes);
 
 app.get("/", (req, res) => {
     res.json({

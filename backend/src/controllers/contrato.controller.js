@@ -223,25 +223,15 @@ async function criar(req, res) {
 
 
         const {
-
             tipo,
-
             valor,
-
             dataInicio,
-
             dataFim,
-
+            dataPagamento,
             status,
-
             clienteId,
-
             imovelId
-
         } = req.body;
-
-
-
 
 
         const imovel = await prisma.imovel.findFirst({
@@ -288,6 +278,10 @@ async function criar(req, res) {
 
                 dataFim: dataFim
                     ? new Date(dataFim)
+                    : null,
+
+                dataPagamento: dataPagamento
+                    ? new Date(dataPagamento)
                     : null,
 
 
@@ -411,8 +405,6 @@ async function atualizar(req, res) {
 
 
 
-
-
         const {
 
             tipo,
@@ -422,6 +414,8 @@ async function atualizar(req, res) {
             dataInicio,
 
             dataFim,
+
+            dataPagamento,
 
             status,
 
@@ -458,6 +452,10 @@ async function atualizar(req, res) {
 
                 dataFim: dataFim
                     ? new Date(dataFim)
+                    : null,
+
+                dataPagamento: dataPagamento
+                    ? new Date(dataPagamento)
                     : null,
 
 
